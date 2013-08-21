@@ -1,0 +1,27 @@
+# turds
+(.*/)?\#[^/]*\#$
+
+*.orig
+*.bak
+
+## Mac OS X
+.DS_Store 
+__MACOSX
+
+# Jetbrains
+workspace.xml
+find.xml
+
+# calabash/cucumber
+.irb-history
+.bundle
+vendor
+Gemfile.lock
+*.gem
+
+# Xcode 4
+*.xcodeproj/*.mode*
+*.xcodeproj/*.perspective*
+*.xcodeproj/*.pbxuser   
+*.xcodeproj/xcuserdata
+*.xcodeproj/project.xcworkspace/xcuserdata
