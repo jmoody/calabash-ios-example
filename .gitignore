@@ -11,6 +11,7 @@ __MACOSX
 # Jetbrains
 workspace.xml
 find.xml
+*.iml
 
 # calabash/cucumber
 .irb-history

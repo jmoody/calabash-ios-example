@@ -1,5 +1,3 @@
-Example for Calabash iOS
-========================
+### Motivation
 
-See
- [https://github.com/calabash/calabash-ios](https://github.com/calabash/calabash-ios)
+does device() function work on test cloud
