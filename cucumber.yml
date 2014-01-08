@@ -3,27 +3,27 @@
 date = Time.now.strftime('%Y-%m-%d-%H%M-%S')
 default_report = "./reports/calabash-#{date}.html"
 
-xamarin_dir = "#{ENV['HOME']}/.xamarin"
+lesspainful_dir = "#{ENV['HOME']}/.xamarin"
 
-pluto_dir = "#{xamarin_dir}/devices/pluto"
+pluto_dir = "#{lesspainful_dir}/devices/pluto"
 pluto_ip = IO.read("#{pluto_dir}/ip") if File.exists?("#{pluto_dir}/ip")
 pluto_udid = IO.read("#{pluto_dir}/udid") if File.exists?("#{pluto_dir}/udid")
 pluto_report = "./reports/pluto/#{date}-pluto.html"
-pluto_ss_path = "#{Dir.pwd}/reports/neptune/screenshots/"
+pluto_ss_path = "#{Dir.pwd}/reports/pluto/screenshots/"
 
-neptune_dir = "#{xamarin_dir}/devices/neptune"
+neptune_dir = "#{lesspainful_dir}/devices/neptune"
 neptune_ip = IO.read("#{neptune_dir}/ip") if File.exists?("#{neptune_dir}/ip")
 neptune_udid = IO.read("#{neptune_dir}/udid") if File.exists?("#{neptune_dir}/udid")
 neptune_report = "./reports/neptune/#{date}-neptune.html"
 neptune_ss_path = "#{Dir.pwd}/reports/neptune/screenshots/"
 
-venus_dir = "#{xamarin_dir}/devices/venus"
+venus_dir = "#{lesspainful_dir}/devices/venus"
 venus_ip = IO.read("#{venus_dir}/ip") if File.exists?("#{venus_dir}/ip")
 venus_udid = IO.read("#{venus_dir}/udid") if File.exists?("#{venus_dir}/udid")
 venus_report = "./reports/venus/#{date}-venus.html"
 venus_ss_path = "#{Dir.pwd}/reports/venus/screenshots/"
 
-earp_dir = "#{xamarin_dir}/devices/earp"
+earp_dir = "#{lesspainful_dir}/devices/earp"
 earp_ip = IO.read("#{earp_dir}/ip") if File.exists?("#{earp_dir}/ip")
 earp_udid = IO.read("#{earp_dir}/udid") if File.exists?("#{earp_dir}/udid")
 earp_report = "./reports/earp/#{date}-earp.html"
@@ -60,8 +60,9 @@ FileUtils.cp("./rerun/earp/rerun.txt", "./rerun/earp/rerun-#{date}.txt") if File
 
 %>
 
-full_output: CALABASH_FULL_CONSOLE_OUTPUT=1 DEBUG=1
-common: -f 'Slowhandcuke::Formatter' -p full_output
+verbose: CALABASH_FULL_CONSOLE_OUTPUT=1 DEBUG=1
+quiet:   CALABASH_FULL_CONSOLE_OUTPUT=0 DEBUG=0
+common: -f 'Slowhandcuke::Formatter' -p verbose
 
 ss_path: SCREENSHOT_PATH=<%= ss_path %>
 
@@ -118,5 +119,3 @@ venus:         -p venus_common -p do_launch -p no_stop
 earp_common:   DEVICE_TARGET=<%= earp_udid %>   DEVICE_ENDPOINT=<%= earp_ip %> -p device_common -p earp_rr   -p iphone   -p earp_html     -p earp_ss
 earp:         -p earp_common -p do_launch -p no_stop
 
-# test cloud
-xtc_wip:  --tags @wip --tags ~@simulator_only

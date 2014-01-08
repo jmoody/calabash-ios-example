@@ -20,6 +20,12 @@ SIM=Calabash::Cucumber::SimulatorHelper
 
 require 'calabash-cucumber/launcher'
 
+puts 'loaded calabash'
+
+
+require './features/step_definitions/my_first_steps.rb'
+include Calabash::Example::Device
+
 
 def embed(x,y=nil,z=nil)
    puts "Screenshot at #{x}"

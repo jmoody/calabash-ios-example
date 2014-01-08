@@ -5,8 +5,19 @@
 *.bak
 
 ## Mac OS X
-.DS_Store 
+.DS_Store
 __MACOSX
+
+.ruby-version
+
+rerun
+reports
+screenshots
+*.png
+*.html
+
+# the xamarin build directory
+xamarin
 
 # Jetbrains
 workspace.xml
