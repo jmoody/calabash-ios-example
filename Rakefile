@@ -295,7 +295,6 @@ namespace :moody do
     device_set = '4b583121' if device_set.eql?('5S')
 
     profile = args.profile
-    profile = 'xtc_wip' if profile.eql?('wip')
 
     ipa = 'LPSimpleExample-cal.ipa'
     sh "cd xamarin; bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"

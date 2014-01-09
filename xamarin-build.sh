@@ -1,6 +1,7 @@
 #!/bin/sh
 
-XAMARIN_DIR="./xamarin/"
+PWD=`pwd`
+XAMARIN_DIR="${PWD}/xamarin"
 
 if [ -d "${XAMARIN_DIR}" ]; then
   rm -rf "${XAMARIN_DIR}"
@@ -31,20 +32,19 @@ xcrun -sdk iphoneos PackageApplication -v "${APP}" -o "${IPA}" > /dev/null
 
 
 echo "INFO: copying files"
-cp "${IPA}" "${XAMARIN_DIR}"
-cp -r "${APP}" "${XAMARIN_DIR}"
+cp "${IPA}" "${XAMARIN_DIR}/"
+cp -r "${APP}" "${XAMARIN_DIR}/"
+cp -r features "${XAMARIN_DIR}/"
 
-echo "INFO: making Gemfile ==> ${XAMARIN_DIR}Gemfile"
-echo "source 'https://rubygems.org'" > "${XAMARIN_DIR}/Gemfile"
-echo "gem 'calabash-cucumber'" >> "${XAMARIN_DIR}/Gemfile"
+echo "INFO: cleaning up"
+rm -rf "${XAMARIN_DIR}/features/Gemfile"
+rm -rf "${XAMARIN_DIR}/features/Gemfile.lock"
+rm -rf "${XAMARIN_DIR}/features/Rakefile"
+rm -rf "${XAMARIN_DIR}/features/.bundle"
+rm -rf "${XAMARIN_DIR}/features/.idea"
 
-echo "INFO: making cucumber.yml ==> ${XAMARIN_DIR}cucumber.yml"
-echo "xtc_wip:      --tags @wip" > "${XAMARIN_DIR}/cucumber.yml"
-
-
-
-rm -rf "${XAMARIN_DIR}/features"
-cp -r features "${XAMARIN_DIR}"
+cp "xtc_gemfile" "${XAMARIN_DIR}/Gemfile"
+cp "xtc_profiles.yml" "${XAMARIN_DIR}/cucumber.yml"
 
 
 
