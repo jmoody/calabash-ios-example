@@ -1,6 +1,5 @@
 #!/bin/sh
 
-PWD=`pwd`
 XAMARIN_DIR="${PWD}/xamarin"
 
 if [ -d "${XAMARIN_DIR}" ]; then
@@ -8,6 +7,20 @@ if [ -d "${XAMARIN_DIR}" ]; then
 fi
 
 mkdir -p "${XAMARIN_DIR}"
+
+echo "INFO: copying features over to ${XAMARIN_DIR}"
+cp -r features "${XAMARIN_DIR}/"
+
+echo "INFO: cleaning up ${XAMARIN_DIR}/features"
+rm -rf "${XAMARIN_DIR}/features/Gemfile"
+rm -rf "${XAMARIN_DIR}/features/Gemfile.lock"
+rm -rf "${XAMARIN_DIR}/features/Rakefile"
+rm -rf "${XAMARIN_DIR}/features/.bundle"
+rm -rf "${XAMARIN_DIR}/features/.idea"
+
+echo "INFO: installing cucumber.yml to ${XAMARIN_DIR}"
+cp "./xtc_profiles.yml" "${XAMARIN_DIR}/cucumber.yml"
+
 
 PRODUCT_NAME="LPSimpleExample-cal"
 SCHEME="LPSimpleExample-cal"
@@ -30,25 +43,7 @@ IPA="${HOME}/tmp/${PRODUCT_NAME}.ipa"
 # use this strategy for simply installing on a local device
 xcrun -sdk iphoneos PackageApplication -v "${APP}" -o "${IPA}" > /dev/null
 
-
-echo "INFO: copying files"
+echo "INFO: copying ipa and app files"
 cp "${IPA}" "${XAMARIN_DIR}/"
 cp -r "${APP}" "${XAMARIN_DIR}/"
 cp -r features "${XAMARIN_DIR}/"
-
-echo "INFO: cleaning up"
-rm -rf "${XAMARIN_DIR}/features/Gemfile"
-rm -rf "${XAMARIN_DIR}/features/Gemfile.lock"
-rm -rf "${XAMARIN_DIR}/features/Rakefile"
-rm -rf "${XAMARIN_DIR}/features/.bundle"
-rm -rf "${XAMARIN_DIR}/features/.idea"
-
-cp "xtc_gemfile" "${XAMARIN_DIR}/Gemfile"
-cp "xtc_profiles.yml" "${XAMARIN_DIR}/cucumber.yml"
-
-
-
-
-
-
-  

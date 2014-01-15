@@ -1,4 +1,15 @@
 require 'irb'
+require 'awesome_print'
+
+# returns the bundle id of the app
+def bundle_id
+  'com.lesspainful.example.LPSimpleExample-cal'
+end
+
+# return the ipa name
+def ipa_name
+  'LPSimpleExample-cal.ipa'
+end
 
 # tell the simulator to become the foremost app
 #
@@ -27,11 +38,6 @@ task :xamarin do exec 'xamarin-build.sh' end
 desc 'generate a cucumber tag report'
 task :tag_report do sh 'cucumber -d -f Cucumber::Formatter::ListTags' end
 
-# returns the bundle id of the app
-def bundle_id
-  'com.lesspainful.example.LPSimpleExample-cal'
-end
-
 # return the device info by reading and parsing the relevant file in the
 # ~/.xamarin directory
 #
@@ -46,6 +52,25 @@ def read_device_info (device, kind)
   end
   cmd = "cat ~/.xamarin/devices/#{device}/#{kind} | tr -d '\n'"
   `#{cmd}`
+end
+
+# return a +Hash+ of XTC device sets where the key is some arbitrary description
+# and the value is a <tt>XTC device set</tt>
+def read_device_sets(path='~/.xamarin/test-cloud/device_sets.csv')
+  ht = Hash.new
+  File.read(File.expand_path(path)).split("\n").each do |line|
+    unless line[0].eql?('#')
+      tokens = line.split(',')
+      ht[tokens[0]] = tokens[1]
+    end
+  end
+  ht
+end
+
+desc 'prints a hash of defined XTC device sets'
+task :device_sets do
+  ht = read_device_sets
+  ap ht
 end
 
 # returns an iOS version string based on a canonical key
@@ -66,8 +91,8 @@ def default_device_opts
   bundle_path = `which bundle`
   use_bundler = (not bundle_path.eql?(''))
   {:bundle =>  use_bundler,
-  :sdk_version => sdk_versions[:ios7],
-  :launch => true}
+   :sdk_version => sdk_versions[:ios7],
+   :launch => true}
 end
 
 # returns a string that can be use to launch a <tt>calabash-ios console</tt>
@@ -211,7 +236,16 @@ task :set_sim_ipad_r do set_default_simulator(:ipad_r) end
 desc 'set the default simulator to the ipad retina 64 bit'
 task :set_sim_ipad_64 do set_default_simulator(:ipad_r_64) end
 
-
+# use <tt>rake install</tt> to install a gem at +path_to_gemspec+
+# returns the version of the gem installed
+def rake_install_gem(path_to_gemspec)
+  out = `cd #{path_to_gemspec}; rake install`
+  tokens = out.split(' ')
+  gem = tokens[0]
+  version = tokens[1]
+  puts "installed #{gem} #{version}"
+  version
+end
 
 # my stuff
 namespace :moody do
@@ -267,7 +301,7 @@ namespace :moody do
 
     if cmd == :install
       sh './xamarin-build.sh'
-      ipa='./xamarin/LPSimpleExample-cal.ipa'
+      ipa="./xamarin/#{ipa_name()}"
       sh "export DYLD_LIBRARY_PATH=#{bin_dir}; #{bin_dir}/ideviceinstaller -U #{udid} --install #{ipa}"
     elsif cmd == :uninstall
       bundle_id = bundle_id()
@@ -284,20 +318,34 @@ namespace :moody do
   task :earp_reinstall do ideviceinstaller('earp', :reinstall) end
 
   # test cloud
-  #noinspection RubyUnusedLocalVariable
   task :tc, :device_set, :profile do |t, args|
     sh './xamarin-build.sh'
+
+    xtc_gemfile = './xamarin/Gemfile'
+
+    calabash_version = rake_install_gem('~/git/calabash-ios/calabash-cucumber')
+    #briar_version = rake_install_gem('~/git/briar')
+
+    File.open(xtc_gemfile, 'w') { |file|
+      file.write("source 'https://rubygems.org'\n")
+      file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
+      #file.write("gem 'briar', '#{briar_version}'\n")
+      #file.write("gem 'faker'\n")
+    }
 
     api_key= `cat ~/.xamarin/test-cloud/moody | tr -d '\n'`
 
     device_set = args.device_set
-    device_set = 'fdc46092' if device_set.eql?('iphones')
-    device_set = '4b583121' if device_set.eql?('5S')
+
+    sets = read_device_sets
+    if sets[device_set]
+      device_set = sets[device_set]
+    end
 
     profile = args.profile
-
-    ipa = 'LPSimpleExample-cal.ipa'
-    sh "cd xamarin; bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
+    ipa = ipa_name()
+    cmd = "cd xamarin; test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
+    sh cmd
   end
 
 end
