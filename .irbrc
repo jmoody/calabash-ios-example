@@ -156,4 +156,4 @@ motd=["Let's get this done!", 'Ready to rumble.', 'Enjoy.', 'Remember to breathe
       'What is a calabash anyway?', 'Smile! You are on camera!', 'Let op! Wild Rooster!',
       "Don't touch that button!", "I'm gonna take this to 11.", 'Console. Engaged.',
       'Your wish is my command.', 'This console session was created just for you.']
-puts "#{motd.sample}"
+puts "#{motd.shuffle.first}"
