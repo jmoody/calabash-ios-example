@@ -59,7 +59,9 @@ end
 def read_device_sets(path='~/.xamarin/test-cloud/device_sets.csv')
   ht = Hash.new
   File.read(File.expand_path(path)).split("\n").each do |line|
-    unless line[0].eql?('#')
+    # not 1.8 compat
+    # unless line[0].eql?('#')
+    unless line.chars.to_a.first.eql?('#')
       tokens = line.split(',')
       ht[tokens[0]] = tokens[1]
     end
