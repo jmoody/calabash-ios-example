@@ -4,7 +4,7 @@ if `whoami`.strip.eql? 'moody'
   # i use bundle and bundle config to specify local gem locations
   # bundle config local.GEM_NAME /path/to/local/git/repository
   #noinspection GemInspection,RailsParamDefResolve
-  gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => '0.9.x-escaping-backslash-issue-284'
+  gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => '0.9.x-expect-map-results'
 
 else
   #noinspection GemInspection
@@ -12,4 +12,5 @@ else
 end
 
 gem 'rake'
-#gem 'mime-types', '1.25'
+# required for 1.8.7 compat
+gem 'mime-types', '1.25'
