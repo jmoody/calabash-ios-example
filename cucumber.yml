@@ -36,8 +36,7 @@ end
 %>
 
 verbose: CALABASH_FULL_CONSOLE_OUTPUT=1 DEBUG=1
-quiet:   CALABASH_FULL_CONSOLE_OUTPUT=0 DEBUG=0
-common: -f 'Slowhandcuke::Formatter' -p quiet
+common: -f 'Slowhandcuke::Formatter'
 
 ss_path: SCREENSHOT_PATH=<%= ss_path %>
 
@@ -59,7 +58,8 @@ reset_btw:    RESET_BETWEEN_SCENARIOS=1
 stop:         NO_STOP=0
 no_stop:      NO_STOP=1
 
-sdk5:  SDK_VERSION=5.1
+# iOS 5 simulators are no longer supported
+#sdk5:  SDK_VERSION=5.1
 sdk6:  SDK_VERSION=6.1
 
 
@@ -78,7 +78,8 @@ device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
 
 pluto_common:   DEVICE_TARGET=<%= devices[:pluto][:udid] %>   DEVICE_ENDPOINT=<%= devices[:pluto][:ip] %> -p device_common -p ipad   -p pluto_html     -p pluto_ss
 pluto:          -p pluto_common -p no_launch
-pluto_launch:   -p pluto_common -p do_launch -p no_stop
+# cannot launch with Xcode 5
+#pluto_launch:   -p pluto_common -p do_launch -p no_stop
 
 neptune_common: DEVICE_TARGET=<%= devices[:neptune][:udid] %> DEVICE_ENDPOINT=<%= devices[:neptune][:ip] %> -p device_common -p iphone -p neptune_html -p neptune_ss
 neptune:        -p neptune_common -p no_launch
