@@ -1,6 +1,8 @@
 # turds
 (.*/)?\#[^/]*\#$
 
+# tags
+
 *.orig
 *.bak
 
@@ -8,13 +10,8 @@
 .DS_Store
 __MACOSX
 
+# rbenv
 .ruby-version
-
-rerun
-reports
-screenshots
-*.png
-*.html
 
 # the xamarin build directory
 xamarin
@@ -24,12 +21,22 @@ workspace.xml
 find.xml
 *.iml
 
-# calabash/cucumber
+# ruby 
 .irb-history
-.bundle
 vendor
 Gemfile.lock
 *.gem
+
+# bundler
+.bundle
+.calabash-branch
+
+# cucumber
+rerun
+reports
+screenshots
+*.png
+*.html
 
 # Xcode 4
 *.xcodeproj/*.mode*
