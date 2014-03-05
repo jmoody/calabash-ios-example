@@ -3,7 +3,6 @@ Feature: Running a test
   I want to have a sample feature file
   So I can begin testing quickly
 
-  @wip
   Scenario: Example steps
     Then I should be able call the device function
 

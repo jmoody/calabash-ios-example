@@ -56,7 +56,7 @@ end
 
 # return a +Hash+ of XTC device sets where the key is some arbitrary description
 # and the value is a <tt>XTC device set</tt>
-def read_device_sets(path='~/.xamarin/test-cloud/device_sets.csv')
+def read_device_sets(path='~/.xamarin/test-cloud/ios-sets.csv')
   ht = Hash.new
   File.read(File.expand_path(path)).split("\n").each do |line|
     # not 1.8 compat
@@ -320,7 +320,7 @@ namespace :moody do
   task :earp_reinstall do ideviceinstaller('earp', :reinstall) end
 
   # test cloud
-  task :tc, :device_set, :profile do |t, args|
+  task :xtc, :device_set, :profile do |t, args|
     sh './xamarin-build.sh'
 
     xtc_gemfile = './xamarin/Gemfile'

@@ -36,7 +36,7 @@ end
 %>
 
 verbose: CALABASH_FULL_CONSOLE_OUTPUT=1 DEBUG=1
-common: -f 'Slowhandcuke::Formatter'
+common:  --no-source -f 'Slowhandcuke::Formatter'
 
 ss_path: SCREENSHOT_PATH=<%= ss_path %>
 
@@ -72,7 +72,7 @@ default: -p common -p ss_path -p html_report -p no_launch -p uai -p no_reset_btw
 launch:  -p common -p ss_path -p html_report -p do_launch -p uai -p no_reset_btw -p no_stop
 
 # required only for devices
-bundle_id:    BUNDLE_ID=com.littlejoysoftware.Briar-cal
+bundle_id:    BUNDLE_ID=com.lesspainful.example.LPSimpleExample-cal
 
 device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
 

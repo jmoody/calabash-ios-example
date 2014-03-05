@@ -26,14 +26,18 @@
 }
 
 -(void) viewDidLoad {
-    [super viewDidLoad];
-    self.uiswitch.isAccessibilityElement = YES;
-    self.uiswitch.accessibilityLabel = @"switch";
+  [super viewDidLoad];
+  self.uiswitch.isAccessibilityElement = YES;
+  self.uiswitch.accessibilityLabel = @"switch";
+  
+  self.button.isAccessibilityElement = YES;
+  self.button.accessibilityLabel=@"login";
 
-    self.button.isAccessibilityElement = YES;
-    self.button.accessibilityLabel=@"login";
+  [self.view setAccessibilityLabel:@"firstView"];
+  [self.textField setAccessibilityLabel:@"textField"];
+  
 }
-							
+
 - (BOOL)textFieldShouldReturn:(UITextField *)_textField {
     [_textField resignFirstResponder];
     return YES;

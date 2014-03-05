@@ -20,12 +20,14 @@ xamarin
 workspace.xml
 find.xml
 *.iml
+.idea/.rakeTasks
 
 # ruby 
 .irb-history
 vendor
 Gemfile.lock
 *.gem
+.env
 
 # bundler
 .bundle
