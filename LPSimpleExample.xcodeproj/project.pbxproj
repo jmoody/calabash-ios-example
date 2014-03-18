@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03d9161280656c09570084c0 /* LPThirdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1B118C75F2200A0D9B6 /* LPThirdViewController.xib */; };
+		0e8ac736513d598cbd769536 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = F5A1674D18C9DC7900C19BC3 /* first.png */; };
+		152de241972234f57457f024 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54947a7d388f8912b366c549 /* CFNetwork.framework */; };
+		17495ae76cac12c30bf74fc7 /* LPFourthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1AF18C75F2200A0D9B6 /* LPFourthViewController.xib */; };
+		2c43a9c7803569b082006bce /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADD8143F6EBF007184CB /* Foundation.framework */; };
+		2ca07517caa7a5898595f29f /* LPSecondViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1BA18C7600400A0D9B6 /* LPSecondViewController~ipad.xib */; };
+		383a331287197653a8843e84 /* LPFirstViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1B618C7600400A0D9B6 /* LPFirstViewController~ipad.xib */; };
+		3c8f440fea8e01016c6345c2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5A1674A18C9DC3E00C19BC3 /* Default-568h@2x.png */; };
+		453d7b4cabf862324b691a9d /* LPSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B137ADF0143F6EBF007184CB /* LPSecondViewController.m */; };
+		4e5eb6539daaf121f8c6d743 /* LPFourthViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1B818C7600400A0D9B6 /* LPFourthViewController~ipad.xib */; };
+		5919507832362599b218ecc7 /* LPThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1497425144B4CBE00E6EE79 /* LPThirdViewController.m */; };
+		711c03364e618148e33b3396 /* LPFirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B137ADF6143F6EBF007184CB /* LPFirstViewController.xib */; };
+		774b9a8a109f9a5a23e1c45f /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = F5A1674F18C9DC7900C19BC3 /* second.png */; };
+		812e59673990c3190548702e /* LPFirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B137ADE9143F6EBF007184CB /* LPFirstViewController.m */; };
+		82ded4f837263b4e0733d54b /* LPThirdViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1BC18C7600400A0D9B6 /* LPThirdViewController~ipad.xib */; };
+		8fae16624bd55de4637ed494 /* calabash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8beee29c193469abfe25b19f /* calabash.framework */; };
+		90f7cf8c9bf6a1aba984ee1f /* LPSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B137ADF9143F6EBF007184CB /* LPSecondViewController.xib */; };
+		9f3a005eb7acf88113e0fc05 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137AE01143F7109007184CB /* MapKit.framework */; };
 		B137ADD7143F6EBF007184CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADD6143F6EBF007184CB /* UIKit.framework */; };
 		B137ADD9143F6EBF007184CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADD8143F6EBF007184CB /* Foundation.framework */; };
 		B137ADDB143F6EBF007184CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADDA143F6EBF007184CB /* CoreGraphics.framework */; };
@@ -31,9 +49,19 @@
 		F5E2D1BF18C7600400A0D9B6 /* LPFourthViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1B818C7600400A0D9B6 /* LPFourthViewController~ipad.xib */; };
 		F5E2D1C018C7600400A0D9B6 /* LPSecondViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1BA18C7600400A0D9B6 /* LPSecondViewController~ipad.xib */; };
 		F5E2D1C118C7600400A0D9B6 /* LPThirdViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5E2D1BC18C7600400A0D9B6 /* LPThirdViewController~ipad.xib */; };
+		b3d4bafa774753608e6d15a9 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5A1675018C9DC7900C19BC3 /* second@2x.png */; };
+		b4f0e631fb7b7bddfcd174f5 /* LPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B19151CC14549E1200A70274 /* LPAppDelegate.m */; };
+		c9e6b984266c36e6414c9500 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADD6143F6EBF007184CB /* UIKit.framework */; };
+		d4ec8452c9b4b8a2fb05782b /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B137ADE2143F6EBF007184CB /* main.m */; };
+		e8b912b862644d02a0bedfe4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B137ADDF143F6EBF007184CB /* InfoPlist.strings */; };
+		ea478c08cb46590c7f96fee0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B137ADDA143F6EBF007184CB /* CoreGraphics.framework */; };
+		f2c0d7b7cbbe4d4d18d819ae /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5A1674E18C9DC7900C19BC3 /* first@2x.png */; };
+		f329469ae1774c0fd3948fdc /* LPFourthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B19151D114549ED100A70274 /* LPFourthViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		54947a7d388f8912b366c549 /* CFNetwork.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		8beee29c193469abfe25b19f /* calabash.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; path = calabash.framework; sourceTree = "<group>"; };
 		B137ADD2143F6EBF007184CB /* LPSimpleExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LPSimpleExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B137ADD6143F6EBF007184CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B137ADD8143F6EBF007184CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -60,6 +88,7 @@
 		F5A1674E18C9DC7900C19BC3 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
 		F5A1674F18C9DC7900C19BC3 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		F5A1675018C9DC7900C19BC3 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
+		F5C18F4E18D849A700016339 /* LPSimpleExample-cal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LPSimpleExample-cal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5E2D1B018C75F2200A0D9B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LPFourthViewController.xib; sourceTree = "<group>"; };
 		F5E2D1B218C75F2200A0D9B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LPThirdViewController.xib; sourceTree = "<group>"; };
 		F5E2D1B718C7600400A0D9B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/LPFirstViewController~ipad.xib"; sourceTree = "<group>"; };
@@ -80,6 +109,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		f44145472bca793ef84ea4e5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9f3a005eb7acf88113e0fc05 /* MapKit.framework in Frameworks */,
+				c9e6b984266c36e6414c9500 /* UIKit.framework in Frameworks */,
+				2c43a9c7803569b082006bce /* Foundation.framework in Frameworks */,
+				ea478c08cb46590c7f96fee0 /* CoreGraphics.framework in Frameworks */,
+				152de241972234f57457f024 /* CFNetwork.framework in Frameworks */,
+				8fae16624bd55de4637ed494 /* calabash.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -96,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				B137ADD2143F6EBF007184CB /* LPSimpleExample.app */,
+				F5C18F4E18D849A700016339 /* LPSimpleExample-cal.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,6 +150,8 @@
 				B137ADD6143F6EBF007184CB /* UIKit.framework */,
 				B137ADD8143F6EBF007184CB /* Foundation.framework */,
 				B137ADDA143F6EBF007184CB /* CoreGraphics.framework */,
+				54947a7d388f8912b366c549 /* CFNetwork.framework */,
+				8beee29c193469abfe25b19f /* calabash.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -196,6 +241,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		46aa40a00741629c92f08a5f /* LPSimpleExample-cal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = dab93ac118f92bcc8313c3af /* Build configuration list for PBXNativeTarget "LPSimpleExample-cal" */;
+			buildPhases = (
+				dd9f8c0f2c8f2600d9751d4b /* Sources */,
+				f44145472bca793ef84ea4e5 /* Frameworks */,
+				06033f5e49ff9d10f131f8e4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LPSimpleExample-cal";
+			productName = "LPSimpleExample-cal";
+			productReference = F5C18F4E18D849A700016339 /* LPSimpleExample-cal.app */;
+			productType = "com.apple.product-type.application";
+		};
 		B137ADD1143F6EBF007184CB /* LPSimpleExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B137ADFE143F6EBF007184CB /* Build configuration list for PBXNativeTarget "LPSimpleExample" */;
@@ -235,11 +297,33 @@
 			projectRoot = "";
 			targets = (
 				B137ADD1143F6EBF007184CB /* LPSimpleExample */,
+				46aa40a00741629c92f08a5f /* LPSimpleExample-cal */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		06033f5e49ff9d10f131f8e4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03d9161280656c09570084c0 /* LPThirdViewController.xib in Resources */,
+				0e8ac736513d598cbd769536 /* first.png in Resources */,
+				e8b912b862644d02a0bedfe4 /* InfoPlist.strings in Resources */,
+				2ca07517caa7a5898595f29f /* LPSecondViewController~ipad.xib in Resources */,
+				4e5eb6539daaf121f8c6d743 /* LPFourthViewController~ipad.xib in Resources */,
+				3c8f440fea8e01016c6345c2 /* Default-568h@2x.png in Resources */,
+				383a331287197653a8843e84 /* LPFirstViewController~ipad.xib in Resources */,
+				82ded4f837263b4e0733d54b /* LPThirdViewController~ipad.xib in Resources */,
+				b3d4bafa774753608e6d15a9 /* second@2x.png in Resources */,
+				711c03364e618148e33b3396 /* LPFirstViewController.xib in Resources */,
+				774b9a8a109f9a5a23e1c45f /* second.png in Resources */,
+				f2c0d7b7cbbe4d4d18d819ae /* first@2x.png in Resources */,
+				17495ae76cac12c30bf74fc7 /* LPFourthViewController.xib in Resources */,
+				90f7cf8c9bf6a1aba984ee1f /* LPSecondViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B137ADD0143F6EBF007184CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -274,6 +358,19 @@
 				B1497426144B4CBE00E6EE79 /* LPThirdViewController.m in Sources */,
 				B19151CD14549E1200A70274 /* LPAppDelegate.m in Sources */,
 				B19151D314549ED100A70274 /* LPFourthViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		dd9f8c0f2c8f2600d9751d4b /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				d4ec8452c9b4b8a2fb05782b /* main.m in Sources */,
+				812e59673990c3190548702e /* LPFirstViewController.m in Sources */,
+				453d7b4cabf862324b691a9d /* LPSecondViewController.m in Sources */,
+				5919507832362599b218ecc7 /* LPThirdViewController.m in Sources */,
+				b4f0e631fb7b7bddfcd174f5 /* LPAppDelegate.m in Sources */,
+				f329469ae1774c0fd3948fdc /* LPFourthViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +452,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		55ed6e500c52b83c534de753 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv7,
+					armv7s,
+				);
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LPSimpleExample/LPSimpleExample-Prefix.pch";
+				INFOPLIST_FILE = "LPSimpleExample/LPSimpleExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-force_load",
+					"\"$(SRCROOT)/calabash.framework/calabash\"",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		B137ADFC143F6EBF007184CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -453,6 +578,34 @@
 			};
 			name = Release;
 		};
+		a319304c89250d107a9421f0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv7,
+					armv7s,
+				);
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LPSimpleExample/LPSimpleExample-Prefix.pch";
+				INFOPLIST_FILE = "LPSimpleExample/LPSimpleExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-force_load",
+					"\"$(SRCROOT)/calabash.framework/calabash\"",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -470,6 +623,15 @@
 			buildConfigurations = (
 				B137ADFF143F6EBF007184CB /* Debug */,
 				B137AE00143F6EBF007184CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		dab93ac118f92bcc8313c3af /* Build configuration list for PBXNativeTarget "LPSimpleExample-cal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				a319304c89250d107a9421f0 /* Debug */,
+				55ed6e500c52b83c534de753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
