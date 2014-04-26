@@ -20,7 +20,7 @@ xamarin
 workspace.xml
 find.xml
 *.iml
-.idea/.rakeTasks
+.rakeTasks
 
 # ruby 
 .irb-history
