@@ -11,3 +11,6 @@ Feature: Running a test
     Then I swipe left
     And I wait until I don't see "Please swipe left"
     And take picture
+
+  Scenario: smoke test the minitest problem
+    Then I use the operations module method labels
