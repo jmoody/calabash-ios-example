@@ -1,13 +1,9 @@
 <%
 
 date = Time.now.strftime('%Y-%m-%d-%H%M-%S')
-default_report = "./reports/calabash-#{date}.html"
-
-ss_path = "./screenshots/"
 
 FileUtils.mkdir("./screenshots") unless File.exists?("./screenshots")
 FileUtils.mkdir("./reports") unless File.exists?("./reports")
-
 
 xamarin_dir = "#{ENV['HOME']}/.xamarin"
 
@@ -32,11 +28,14 @@ device_list.each do |device|
   FileUtils.mkdir("./reports/#{device}/screenshots") unless File.exists?("./reports/#{device}/screenshots")
 end
 
+default_report = "./reports/calabash-#{date}.html"
+ss_path = "./screenshots/"
+
 
 %>
 
 verbose: CALABASH_FULL_CONSOLE_OUTPUT=1 DEBUG=1
-common:  --no-source -f 'Slowhandcuke::Formatter'
+common: --no-source -f 'Slowhandcuke::Formatter'
 
 ss_path: SCREENSHOT_PATH=<%= ss_path %>
 
@@ -58,31 +57,60 @@ reset_btw:    RESET_BETWEEN_SCENARIOS=1
 stop:         NO_STOP=0
 no_stop:      NO_STOP=1
 
-# iOS 5 simulators are no longer supported
-#sdk5:  SDK_VERSION=5.1
-sdk6:  SDK_VERSION=6.1
-
-
 ipad:   DEVICE=ipad   -p common --tags ~@iphone --tags ~@iphone_only
 iphone: DEVICE=iphone -p common --tags ~@ipad --tags ~@ipad_only
 
-uai: DEVICE_TARGET=simulator --tags ~@device --tags ~@device_only
+simulator:     -p common -p ss_path -p html_report --tags ~@device_only --tags ~@device
+sim_launch:    -p simulator -p do_launch -p no_reset_btw -p no_stop
+sim_no_launch: -p simulator -p no_launch -p no_reset_btw
 
-default: -p common -p ss_path -p html_report -p no_launch -p uai -p no_reset_btw -p no_stop
-launch:  -p common -p ss_path -p html_report -p do_launch -p uai -p no_reset_btw -p no_stop
+sim61:     -p sim_launch    DEVICE_TARGET='iPhone (3.5-inch) - Simulator - iOS 6.1'
+sim61_nl:  -p sim_no_launch DEVICE_TARGET='iPhone (3.5-inch) - Simulator - iOS 6.1'
+sim61_sl:  -p sim_launch LAUNCH_VIA=sim_launcher DEVICE_TARGET='iPhone (3.5-inch) - Simulator - iOS 6.1'
+
+sim61r:    -p sim_launch DEVICE_TARGET='iPhone Retina (3.5-inch) - Simulator - iOS 6.1'
+sim61r_nl: -p sim_no_launch DEVICE_TARGET='iPhone Retina (3.5-inch) - Simulator - iOS 6.1'
+sim70r:    -p sim_launch DEVICE_TARGET='iPhone Retina (3.5-inch) - Simulator - iOS 7.0'
+sim71r:    -p sim_launch DEVICE_TARGET='iPhone Retina (3.5-inch) - Simulator - iOS 7.1'
+
+sim61_4in:    -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch) - Simulator - iOS 6.1'
+sim61_4in_nl: -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch) - Simulator - iOS 6.1'
+sim70_4in:    -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch) - Simulator - iOS 7.0'
+sim71_4in:    -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch) - Simulator - iOS 7.1'
+
+sim70_64b:    -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch 64-bit) - Simulator - iOS 7.0'
+sim71_64b:    -p sim_launch DEVICE_TARGET='iPhone Retina (4-inch 64-bit) - Simulator - iOS 7.1'
+
+sim61_ipad:        -p sim_launch DEVICE_TARGET='iPad - Simulator - iOS 6.1'
+sim61_ipad_nl:     -p sim_no_launch DEVICE_TARGET='iPad - Simulator - iOS 6.1'
+sim70_ipad:        -p sim_launch DEVICE_TARGET='iPad - Simulator - iOS 7.0'
+sim71_ipad:        -p sim_launch DEVICE_TARGET='iPad - Simulator - iOS 7.1'
+
+sim61_ipad_r:      -p sim_launch DEVICE_TARGET='iPad Retina - Simulator - iOS 6.1'
+sim61_ipad_r_nl:   -p sim_no_launch DEVICE_TARGET='iPad Retina - Simulator - iOS 6.1'
+sim70_ipad_r:      -p sim_launch DEVICE_TARGET='iPad Retina - Simulator - iOS 7.0'
+sim71_ipad_r:      -p sim_launch DEVICE_TARGET='iPad Retina - Simulator - iOS 7.1'
+
+sim70_ipad_r_64b:  -p sim_launch DEVICE_TARGET='iPad Retina (64-bit) - Simulator - iOS 7.0'
+sim71_ipad_r_64b:  -p sim_launch DEVICE_TARGET='iPad Retina (64-bit) - Simulator - iOS 7.1'
+
+default:    -p sim71_4in
+
+no_uia:   -p common -p ss_path -p html_report -p no_launch -p no_reset_btw            -p sim61_4in
 
 # required only for devices
-bundle_id:    BUNDLE_ID=com.lesspainful.example.LPSimpleExample-cal
+bundle_id:    BUNDLE_ID=com.littlejoysoftware.Briar-cal
 
 device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
 
 pluto_common:   DEVICE_TARGET=<%= devices[:pluto][:udid] %>   DEVICE_ENDPOINT=<%= devices[:pluto][:ip] %> -p device_common -p ipad   -p pluto_html     -p pluto_ss
-pluto:          -p pluto_common -p no_launch
-# cannot launch with Xcode 5
-#pluto_launch:   -p pluto_common -p do_launch -p no_stop
+# cannot test collection views on iOS 5
+pluto:          -p pluto_common -p no_launch --tags ~@collection_view
 
 neptune_common: DEVICE_TARGET=<%= devices[:neptune][:udid] %> DEVICE_ENDPOINT=<%= devices[:neptune][:ip] %> -p device_common -p iphone -p neptune_html -p neptune_ss
-neptune:        -p neptune_common -p no_launch
+
+# cannot test email views without launching on iOS 6
+neptune:        -p neptune_common -p no_launch --tags ~@email
 neptune_launch: -p neptune_common -p do_launch -p no_stop
 
 venus_common:   DEVICE_TARGET=<%= devices[:venus][:udid] %>   DEVICE_ENDPOINT=<%= devices[:venus][:ip] %> -p device_common -p ipad   -p venus_html     -p venus_ss
