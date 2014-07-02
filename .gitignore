@@ -5,6 +5,7 @@
 
 *.orig
 *.bak
+build
 
 ## Mac OS X
 .DS_Store
@@ -22,7 +23,7 @@ find.xml
 *.iml
 .rakeTasks
 
-# ruby 
+# ruby
 .irb-history
 vendor
 Gemfile.lock
@@ -43,6 +44,6 @@ screenshots
 # Xcode 4
 *.xcodeproj/*.mode*
 *.xcodeproj/*.perspective*
-*.xcodeproj/*.pbxuser   
+*.xcodeproj/*.pbxuser
 *.xcodeproj/xcuserdata
 *.xcodeproj/project.xcworkspace/xcuserdata
