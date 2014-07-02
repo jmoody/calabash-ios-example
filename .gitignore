@@ -12,9 +12,6 @@ __MACOSX
 build
 ci-reports
 
-# rbenv
-.ruby-version
-
 # the xamarin build directory
 xamarin
 
