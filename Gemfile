@@ -11,11 +11,14 @@ case username
 
   when 'moody'
 
-    gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => 'master'
-    gem 'briar', '0.1.4.b2'
+    gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'fix/operations-and-minitest-should-be-19-compat'
+
+    #gem 'xamarin-test-cloud', :git => 'git@github.com:jmoody/test-cloud-command-line.git', :branch => 'master'
 
   when 'your username here'
 
   else
     gem 'calabash-cucumber'
 end
+
+gem 'xcpretty'
