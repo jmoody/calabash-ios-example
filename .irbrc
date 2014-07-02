@@ -12,6 +12,23 @@ IRB.conf[:SAVE_HISTORY] = 50
 # Store results in home directory with specified file name
 IRB.conf[:HISTORY_FILE] = '.irb-history'
 
+def embed(x,y=nil,z=nil)
+   puts "Screenshot at #{x}"
+end
+
+#noinspection RubyUnusedLocalVariable,RubyInstanceMethodNamingConvention
+def World(*world_modules, &proc)
+  world_modules.each { |mod|
+    include mod
+    puts "loaded '#{mod}'"
+  }
+end
+
+# catch cucumber pending function
+def pending(message = 'TODO')
+  raise "pending #{message}"
+end
+
 require 'calabash-cucumber/operations'
 extend Calabash::Cucumber::Operations
 
@@ -19,18 +36,7 @@ require 'calabash-cucumber/launch/simulator_helper'
 SIM=Calabash::Cucumber::SimulatorHelper
 
 require 'calabash-cucumber/launcher'
-
 puts 'loaded calabash'
-
-
-require './features/step_definitions/my_first_steps.rb'
-include Calabash::Example::Device
-
-
-def embed(x,y=nil,z=nil)
-   puts "Screenshot at #{x}"
-end
-
 
 @ai=:accessibilityIdentifier
 @al=:accessibilityLabel
