@@ -6,14 +6,13 @@ module Calabash
   end
 end
 
-begin
+World(Calabash::Example::Device)
 
-  World(Calabash::Example::Device)
+Then(/^I should be able call the device function$/) do
+  default_device()
+end
 
-  Then(/^I should be able call the device function$/) do
-    default_device()
-  end
-
-rescue
-  puts 'loaded Calabash::Example::Device'
+Given /^I am on the Welcome Screen$/ do
+  element_exists("view")
+  sleep(STEP_PAUSE)
 end
