@@ -1,15 +1,16 @@
-# turds
+# emacs turds
 (.*/)?\#[^/]*\#$
-
-# tags
-
-*.orig
-*.bak
-build
 
 ## Mac OS X
 .DS_Store
 __MACOSX
+
+*.orig
+*.bak
+
+# ci
+build
+ci-reports
 
 # rbenv
 .ruby-version
