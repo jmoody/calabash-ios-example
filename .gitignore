@@ -26,11 +26,14 @@ find.xml
 vendor
 Gemfile.lock
 *.gem
-.env
+.ruby-version
 
 # bundler
 .bundle
 .calabash-branch
+
+# briar
+.env
 
 # cucumber
 rerun
