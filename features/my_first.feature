@@ -3,9 +3,11 @@ Feature: Running a test
   I want to have a sample feature file
   So I can begin testing quickly
 
+  @reset_app
   Scenario: device function
     Then I should be able call the device function
 
+  @reset_simulator
   Scenario: example steps
     Given I am on the Welcome Screen
     Then I swipe left
