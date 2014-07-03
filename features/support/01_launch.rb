@@ -16,32 +16,57 @@
 
 require 'calabash-cucumber/launcher'
 
+# noinspection ALL
+module LaunchControl
+  @@launcher = nil
 
-# APP_BUNDLE_PATH = "~/Library/Developer/Xcode/DerivedData/??/Build/Products/Calabash-iphonesimulator/??.app"
-# You may uncomment the above to overwrite the APP_BUNDLE_PATH
-# However the recommended approach is to let Calabash find the app itself
-# or set the environment variable APP_BUNDLE_PATH
+  def self.launcher
+    @@launcher ||= Calabash::Cucumber::Launcher.new
+  end
 
+  def self.launcher=(launcher)
+    @@launcher = launcher
+  end
+end
+
+Before('@reset_app') do
+  launcher = LaunchControl.launcher
+  if launcher.simulator_target?
+    launcher.reset_app_sandbox
+  else
+    # no-op for devices
+  end
+end
+
+Before('@reset_simulator') do
+  launcher = LaunchControl.launcher
+  if launcher.simulator_target?
+    launcher.reset_simulator
+  else
+    # no-op for devices
+  end
+end
 
 Before do |scenario|
-  @calabash_launcher = Calabash::Cucumber::Launcher.new
-  unless @calabash_launcher.calabash_no_launch?
-    @calabash_launcher.relaunch
-    @calabash_launcher.calabash_notify(self)
+  launcher = LaunchControl.launcher
+  unless launcher.calabash_no_launch?
+    launcher.relaunch
+    launcher.calabash_notify(self)
   end
 end
 
 After do |scenario|
-  unless @calabash_launcher.calabash_no_stop?
+  launcher = LaunchControl.launcher
+  unless launcher.calabash_no_stop?
     calabash_exit
-    if @calabash_launcher.active?
-      @calabash_launcher.stop
+    if launcher.active?
+      launcher.stop
     end
   end
 end
 
 at_exit do
-  launcher = Calabash::Cucumber::Launcher.new
+  launcher = LaunchControl.launcher
   if launcher.simulator_target?
     Calabash::Cucumber::SimulatorHelper.stop unless launcher.calabash_no_stop?
   end
