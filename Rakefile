@@ -1,42 +1,13 @@
 require 'irb'
 require 'awesome_print'
+require 'retriable'
+require 'dotenv'
+require 'yaml'
 
-# returns the bundle id of the app
-def bundle_id
-  'com.lesspainful.example.LPSimpleExample-cal'
-end
-
-# return the ipa name
-def ipa_name
-  'LPSimpleExample-cal.ipa'
-end
-
-# tell the simulator to become the foremost app
-#
-# uses Apple Script
-def activate_simulator
-  sh "/usr/bin/osascript -e 'tell application \"#{ENV['DEVELOPER_DIR']}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app\" to activate'"
-end
-
-desc 'make the simulator the foremost app'
-task :launch_sim do activate_simulator end
-
-# tell RubyMine to become the foremost app
-def activate_rubymine
-  sh "/usr/bin/osascript -e 'tell application \"RubyMine\" to activate'"
-end
-
-desc 'make RubyMine the foremost app'
-task :activate_rubymine do
-  activate_simulator
-  activate_rubymine
-end
-
-desc 'build and package the project so in can be submitted to the test cloud'
-task :xamarin do exec 'xamarin-build.sh' end
+Dotenv.load
 
 desc 'generate a cucumber tag report'
-task :tag_report do sh 'cucumber -d -f Cucumber::Formatter::ListTags' end
+task :tags do sh 'cucumber -d -f Cucumber::Formatter::ListTags' end
 
 # return the device info by reading and parsing the relevant file in the
 # ~/.xamarin directory
@@ -59,9 +30,7 @@ end
 def read_device_sets(path='~/.xamarin/test-cloud/ios-sets.csv')
   ht = Hash.new
   File.read(File.expand_path(path)).split("\n").each do |line|
-    # not 1.8 compat
-    # unless line[0].eql?('#')
-    unless line.chars.to_a.first.eql?('#')
+    unless line[0].eql?('#')
       tokens = line.split(',')
       ht[tokens[0]] = tokens[1]
     end
@@ -69,286 +38,226 @@ def read_device_sets(path='~/.xamarin/test-cloud/ios-sets.csv')
   ht
 end
 
+# return a +String+ representation of an XTC account API token
+def read_api_token(account_name)
+  path = File.expand_path("~/.xamarin/test-cloud/#{account_name}")
+
+  unless File.exist?(path)
+    puts "cannot read account information for '#{account_name}'"
+    raise "file '#{path}' does not exist"
+  end
+
+  begin
+    IO.readlines(path).first.strip
+  rescue Exception => e
+    puts "cannot read account information for '#{account_name}'"
+    raise e
+  end
+end
+
 desc 'prints a hash of defined XTC device sets'
-task :device_sets do
+task :sets do
   ht = read_device_sets
   ap ht
 end
 
-# returns an iOS version string based on a canonical key
-#
-# the iOS version string is used to control which version of the simulator is
-# launched.  use this to set the +SDK_VERSION+.
-#
-# IMPORTANT: launching an iOS 5 simulator is not support in Xcode 5 or greater
-# IMPORTANT: Instruments 5.0 cannot be used to launch an app on an iOS 5 device
-def sdk_versions
-  {:ios5 => '5.1',
-   :ios6 => '6.1',
-   :ios7 => '7.0'}
-end
 
-# returns a hash with default arguments for various launch and irb functions
-def default_device_opts
-  bundle_path = `which bundle`
-  use_bundler = (not bundle_path.eql?(''))
-  {:bundle =>  use_bundler,
-   :sdk_version => sdk_versions[:ios7],
-   :launch => true}
-end
-
-# returns a string that can be use to launch a <tt>calabash-ios console</tt>
-# that is configured using the opts hash
-#
-#   ios_console_cmd('neptune') # => a command to launch an irb against neptune
-#
-# used to create rake tasks like:
-#
-#   rake moody:neptune
-def ios_console_cmd(device, opts={})
-  default_opts = default_device_opts()
-  opts = default_opts.merge(opts)
-
-  # make a screenshot directory if one does not exist
-  # *** trailing slash required ***
-  ss_path = './screenshots/'
-  FileUtils.mkdir(ss_path) unless File.exists?(ss_path)
-
-  env = ["SCREENSHOT_PATH=#{ss_path}",
-         'DEBUG=1',
-         'CALABASH_FULL_CONSOLE_OUTPUT=1']
-
-  if device.eql? :simulator
-    udid = 'simulator'
-    env << "DEVICE_TARGET='#{udid}'"
-    sdk_version = opts[:sdk_version]
-    env << "SDK_VERSION='#{sdk_version}'"
-  else
-    udid = read_device_info device, :udid
-    env << "DEVICE_TARGET='#{udid}'"
-    ip = read_device_info device, :ip
-    env << "DEVICE_ENDPOINT='#{ip}'"
-    bundle_id = bundle_id()
-    env << "BUNDLE_ID='#{bundle_id}'"
-  end
-
-  env << "NO_LAUNCH=#{opts[:launch] ? '0' : '1'}"
-
-  env << "IRBRC='./.irbrc'"
-  env << 'bundle exec' if opts[:bundle]
-  env << 'irb'
-  env.join(' ')
-end
-
-# spawns a calabash console for the device using the opts hash
-def ios_irb (device, opts={})
-  default_opts = default_device_opts()
-  opts = default_opts.merge(opts)
-  cmd = ios_console_cmd(device, opts)
-  puts "#{cmd}"
-  exec cmd
-end
-
-# calabash simulator consoles
-
-desc 'starts a calabash-ios console against the iOS 6 simulator'
-task :sim6 do ios_irb(:simulator, {:sdk_version => sdk_versions[:ios6]}) end
-desc 'starts a calabash-ios console against the iOS 7 simulator'
-task :sim7 do ios_irb(:simulator, {:sdk_version => sdk_versions[:ios7]}) end
-
-# returns a verbose simulator description key based on a canonical key
-#
-# using to control which simulator is launched
-def simulator_hash
-  {:iphone => 'iPhone Retina (3.5-inch)',
-   :iphone_4in => 'iPhone Retina (4-inch)',
-   :iphone_4in_64 => 'iPhone Retina (4-inch 64-bit)',
-   :ipad => 'iPad',
-   :ipad_r => 'iPad Retina',
-   :ipad_r_64 => 'iPad Retina (64-bit)'}
-end
-
-# returns a canonical key for the current default simulator
-def default_simulated_device
-  res = `defaults read com.apple.iphonesimulator "SimulateDevice"`.chomp
-  simulator_hash.each { |key, value|
-    return key if res.eql?(value)
+# noinspection RubyStringKeysInHashInspection
+def ruby_versions
+  {
+        '21' => '2.1.2',
+        '20' => '2.0.0-p353',
+        '19' => '1.9.3-p484',
   }
-  raise "could not find '#{res}' in hash values '#{simulator_hash()}'"
 end
 
-# kills the simulator if it is running
-#
-# uses Apple Script
-def kill_simulator
-  cmd = "xcode-select --print-path | tr -d '\n'"
-  dev_dir = `#{cmd}`
-  sh "/usr/bin/osascript -e 'tell application \"#{dev_dir}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app\" to quit'"
+def switch_ruby_version(version)
+  versions = ruby_versions
+  unless versions[version]
+    raise "expected version '#{version}' to be one of '#{versions}'"
+  end
+  sh "rbenv local #{versions[version]}"
+  sh 'rbenv rehash'
 end
 
-desc 'kills the current simulator'
-task :kill_sim do kill_simulator end
+task :ruby19 do switch_ruby_version('19') end
+task :ruby20 do switch_ruby_version('20') end
+task :ruby21 do switch_ruby_version('21') end
 
-
-# sets the default simulator using a canonical key
-#
-#          :iphone # => 'iPhone Retina (3.5-inch)'
-#      :iphone_4in # => 'iPhone Retina (4-inch)'
-#   :iphone_4in_64 # => 'iPhone Retina (4-inch 64-bit)'
-#            :ipad # => 'iPad'
-#          :ipad_r # => 'iPad Retina'
-#       :ipad_r_64 # => 'iPad Retina (64-bit)'
-#
-def set_default_simulator(device_key)
-  hash = simulator_hash
-  unless hash[device_key]
-    raise "#{device_key} was not one of '#{hash.keys}'"
-  end
-
-  activate_simulator
-  current_device = default_simulated_device()
-  unless current_device.eql?(device_key)
-    value = hash[device_key]
-    puts "setting default simulator to '#{value}' using device key '#{device_key}'"
-    `defaults write com.apple.iphonesimulator "SimulateDevice" '"#{value}"'`
-    kill_simulator
-  end
-  activate_simulator
+task :clean_gems do
+  system 'bundle clean --force'
 end
 
-desc 'returns the default simulator as a canonical key'
-task :default_simulator do puts "#{default_simulated_device()}" end
-
-desc 'sets the default simulator using a canonical key'
-task :set_simulator, :device_key do |t, args|
-  key = args.device_key().to_sym
-  set_default_simulator(key)
+def idv_bundle_installed(udid, bundle_id, installer = '/usr/local/bin/ideviceinstaller')
+  cmd = "#{installer} -u #{udid} -l"
+  puts cmd
+  `#{cmd}`.strip.split(/\s/).include? bundle_id
 end
 
-desc 'set the default simulator to the iphone 3.5in'
-task :set_sim_iphone do set_default_simulator(:iphone) end
-desc 'set the default simulator to the iphone 4in'
-task :set_sim_iphone_4in do set_default_simulator(:iphone_4in) end
-desc 'set the default simulator to the iphone 4in 64bit'
-task :set_sim_iphone_64 do set_default_simulator(:iphone_4in_64) end
-desc 'set the default simulator to the ipad (non retina)'
-task :set_sim_ipad do set_default_simulator(:ipad) end
-desc 'set the default simulator to the ipad retina'
-task :set_sim_ipad_r do set_default_simulator(:ipad_r) end
-desc 'set the default simulator to the ipad retina 64 bit'
-task :set_sim_ipad_64 do set_default_simulator(:ipad_r_64) end
+def idv_install(udid, ipa, bundle_id, installer = '/usr/local/bin/ideviceinstaller')
+  if idv_bundle_installed udid, bundle_id, installer
+    puts "bundle '#{bundle_id}' is already installed"
+    return true
+  end
 
-# use <tt>rake install</tt> to install a gem at +path_to_gemspec+
-# returns the version of the gem installed
-def rake_install_gem(path_to_gemspec)
-  out = `cd #{path_to_gemspec}; rake install`
-  tokens = out.split(' ')
-  gem = tokens[0]
-  version = tokens[1]
-  puts "installed #{gem} #{version}"
-  version
+  cmd = "#{installer} -u #{udid} --install #{ipa}"
+  system cmd
+  unless idv_bundle_installed(udid, bundle_id, installer)
+    raise "could not install '#{ipa}' on '#{udid}' with '#{bundle_id}'"
+  end
+  true
 end
 
-# my stuff
-namespace :moody do
-
-  def ruby_versions
-    {'20' => '2.0.0-p353',
-     '19' => '1.9.3-p484',
-     '18' => '1.8.7-p374'}
+def idv_uninstall(udid, bundle_id, installer = '/usr/local/bin/ideviceinstaller')
+  unless idv_bundle_installed udid, bundle_id, installer
+    return true
   end
-
-  def switch_ruby_version(version)
-    versions = ruby_versions
-    unless versions[version]
-      raise "expected version '#{version}' to be one of '#{versions}'"
-    end
-    sh "rbenv local #{versions[version]}"
-    sh 'rbenv rehash'
+  cmd = "#{installer} -u #{udid} --uninstall #{bundle_id}"
+  system cmd
+  if idv_bundle_installed(udid, bundle_id, installer)
+    raise "could not uninstall '#{bundle_id}' on '#{udid}'"
   end
+  true
+end
 
-  task :ruby18 do switch_ruby_version('18') end
-  task :ruby19 do switch_ruby_version('19') end
-  task :ruby20 do switch_ruby_version('20') end
+task :test_devices do
 
-  def reinstall_gems
-    puts 'uninstalling gems'
-    `gem list --no-version | xargs gem uninstall -ax`
-    puts 'installing bundler'
-    `gem install bundler`
-    puts 'installing gems'
-    `bundle install`
-  end
+  system 'xtc-prepare.sh'
 
-  #noinspection RubyUnusedLocalVariable
-  def smoke_test(device)
-    reinstall_gems
-    cmd = "bundle exec cucumber -p quiet -p #{device} --tags @smoke_test"
-    sh cmd
-  end
-
-  task :venus_smoke do smoke_test 'venus' end
-
-  # calabash device consoles
-  task :venus do ios_irb('venus') end
-  task :earp do ios_irb('earp') end
-  task :neptune do ios_irb('neptune', {:launch => false, :sdk_version => sdk_versions[:ios6]}) end
-  task :pluto do ios_irb('pluto', {:launch => false, :sdk_version => sdk_versions[:ios5]}) end
-
-  def ideviceinstaller(device, cmd)
-    cmds = [:install, :uninstall, :reinstall]
-    raise "#{cmd} must be one of '#{cmds}'" unless cmds.include? cmd
-    udid =  read_device_info(device, :udid)
-    bin_dir='~/bin/libimobiledevice'
-
-    if cmd == :install
-      sh './xamarin-build.sh'
-      ipa="./xamarin/#{ipa_name()}"
-      sh "export DYLD_LIBRARY_PATH=#{bin_dir}; #{bin_dir}/ideviceinstaller -U #{udid} --install #{ipa}"
-    elsif cmd == :uninstall
-      bundle_id = bundle_id()
-      sh "export DYLD_LIBRARY_PATH=#{bin_dir}; #{bin_dir}/ideviceinstaller -U #{udid} --uninstall #{bundle_id}"
-    else
-      ideviceinstaller(device, :uninstall)
-      ideviceinstaller(device, :install)
+  candidates = ['venus', 'mars', 'saturn', 'neptune', 'earp']
+  connected = `instruments -s devices`.strip.split(/\s/)
+  devices = []
+  candidates.each do |candidate|
+    if connected.include? candidate
+      devices << candidate
     end
   end
 
-  task :pluto_reinstall do ideviceinstaller('pluto', :reinstall) end
-  task :neptune_reinstall do ideviceinstaller('neptune', :reinstall) end
-  task :venus_reinstall do ideviceinstaller('venus', :reinstall) end
-  task :earp_reinstall do ideviceinstaller('earp', :reinstall) end
+  #devices = ['earp']
+  ipa = './xtc-staging/LPSimpleExample-cal.ipa'
+  installer = '/usr/local/bin/ideviceinstaller'
+  bundle_id = 'com.lesspainful.example.LPSimpleExample-cal'
+  devices.each do |device|
+    udid = read_device_info(device, :udid)
 
-  # test cloud
+    Retriable.retriable do
+      idv_uninstall udid, bundle_id, installer
+    end
+
+    Retriable.retriable do
+      idv_install udid, ipa, bundle_id, installer
+    end
+
+    system "cucumber -p #{device}"
+
+    Retriable.retriable do
+      idv_uninstall udid, bundle_id, installer
+    end
+  end
+end
+
+
+namespace :not_working do
+# not working
+  desc "submit a job to the XTC - $ rake xtc['0b00ad15','default']"
+#noinspection RubyUnusedLocalVariable
   task :xtc, :device_set, :profile do |t, args|
-    sh './xamarin-build.sh'
+    unless args.count == 2
+      puts 'Usage: rake xtc[<device-set>,<profile>]'
+      puts 'ex.    rake xtc[airs,login]'
+      puts 'ex.    rake xtc[0b00ad15,default]'
+      puts "expected 2 args - device set, profile, account - found '#{args}'"
+      exit 1
+    end
 
-    xtc_gemfile = './xamarin/Gemfile'
+    dotenv = File.expand_path('./.env')
+    unless File.exists?(dotenv)
+      puts 'expected a .env file'
+      puts "if you haven't already, copy the dotenv-example to .env and update the contents"
+      puts '1. $ cp dotenv-example .env'
+      puts '2. update the contents of .env'
+      exit 1
+    end
 
-    calabash_version = rake_install_gem('~/git/calabash-ios/calabash-cucumber')
-    #briar_version = rake_install_gem('~/git/briar')
+    system 'xtc-prepare.sh'
 
-    File.open(xtc_gemfile, 'w') { |file|
-      file.write("source 'https://rubygems.org'\n")
-      file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
-      #file.write("gem 'briar', '#{briar_version}'\n")
-      #file.write("gem 'faker'\n")
-    }
+    staging_dir = './xtc-staging'
+    config_dir = './config'
+    xtc_profiles = "#{config_dir}/xtc-profiles.yml"
 
-    api_key= `cat ~/.xamarin/test-cloud/moody | tr -d '\n'`
+    features_dir = './features'
+
+
+    ipa = ENV['IPA']
+    if ipa.nil? or ipa == ''
+      raise 'expected IPA to be defined - check your .env file'
+    end
+
+    ipa = File.expand_path(ipa)
+    unless File.exists?(ipa)
+      puts "IPA points to a file that does not exist '#{ipa}'"
+      exit 1
+    end
+
+    series = ENV['XTC_SERIES']
+    if series.nil? or series == ''
+      puts 'expected XTC_SERIES to be defined - check your .env file'
+      exit 1
+    end
+
+    locale = ENV['XTC_LOCALE']
+    if locale.nil? or locale == ''
+      puts 'expected XTC_LOCALE to be defined - check your .env file'
+      exit 1
+    end
+
+    xtc_account = ENV['XTC_ACCOUNT']
+    if xtc_account.nil? or xtc_account == ''
+      puts 'expected XTC_ACCOUNT to be defined - check your .env file'
+      exit 1
+    end
+
+    api_token = read_api_token xtc_account
+
+
+    profile = args.profile
+    profiles = YAML.load_file(xtc_profiles)
+    unless profiles[profile]
+      puts "expected '#{profile}' to be one of '#{profiles.keys}'"
+      puts "could not find '#{profile}' in '#{xtc_profiles}'"
+      exit 1
+    end
 
     device_set = args.device_set
-
     sets = read_device_sets
     if sets[device_set]
       device_set = sets[device_set]
     end
 
-    profile = args.profile
-    ipa = ipa_name()
-    cmd = "cd xamarin; test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
-    sh cmd
+    async = '--async'
+    if ENV['XTC_WAIT_FOR_RESULTS'] == '1'
+      async = '--no-async'
+    end
+
+    app_name = 'LPSimpleExample'
+
+    args = [ipa,
+            api_token,
+            "-d #{device_set}",
+            '-c cucumber.yml',
+            "-p #{profile}",
+            "-a \"#{app_name}\"",
+            "--series  \"#{series}\"",
+            "--locale \"#{locale}\"",
+            async]
+
+    shasum = `shasum #{staging_dir}/#{ipa}`
+    puts "INFO: ipa sha => #{shasum}"
+    cmd = "bundle exec test-cloud submit #{args.join(' ')}"
+    puts "cd xtc-staging; #{cmd}"
+    Dir.chdir(staging_dir) do
+      system 'bundle install'
+      exec cmd
+    end
   end
-
 end
-
