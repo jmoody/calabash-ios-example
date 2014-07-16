@@ -7,7 +7,7 @@ if [ "$USER" = "jenkins" ]; then
     rbenv rehash
 fi
 
-TAGS=$*
+CUCUMBER_ARGS=$*
 
 rbenv exec bundle install
 
@@ -24,29 +24,6 @@ CAL_BUILD_DIR="${PWD}/build/jenkins"
 rm -rf "${CAL_BUILD_DIR}"
 mkdir -p "${CAL_BUILD_DIR}"
 
-####################### JENKINS KEYCHAIN #######################################
-
-if [ ${USER} = "jenkins" ]; then
-    echo "INFO: unlocking the keychain"
-    /usr/bin/security default-keychain -d user -s "${JENKINS_KEYCHAIN}"
-    RETVAL=$?
-    if [ $RETVAL != 0 ]; then
-        echo "FAIL: could not set the default keychain"
-        exit $RETVAL
-    fi
-fi
-
-# unlock the keychain - WARNING: might need to run 1x in UI to 'allow always'
-if [ ${USER} = "jenkins" ]; then
-    /usr/bin/security unlock-keychain -p "${JENKINS_KEYCHAIN_PASS}" "${JENKINS_KEYCHAIN}"
-    RETVAL=$?
-    if [ $RETVAL != 0 ]; then
-        echo "FAIL: could not unlock the keychain"
-        exit $RETVAL
-    fi
-fi
-
-# build the -cal target to get it on the phone
 set +o errexit
 
 xcodebuild \
@@ -69,7 +46,6 @@ else
 fi
 
 # remove any stale targets
-#rbenv exec bundle exec briar rm sim-targets
 rbenv exec bundle exec calabash-ios sim reset
 
 #sleep 15
@@ -80,17 +56,17 @@ set +o errexit
 export APP_BUNDLE_PATH="${CAL_BUILD_DIR}/Build/Products/${CAL_BUILD_CONFIG}-iphonesimulator/${TARGET_NAME}.app"
 
 
-#rbenv exec bundle exec cucumber -p sim61_4in          -f json -o ci-reports/calabash/ipad-61-4in.json $TAGS
-rbenv exec bundle exec cucumber -p sim71_4in          -f json -o ci-reports/calabash/iphone-71-4in.json $TAGS
-#rbenv exec bundle exec cucumber -p sim71_64b         -f json -o ci-reports/calabash/iphone-71-4in-64b.json $TAGS
-#rbenv exec bundle exec cucumber -p sim61r            -f json -o ci-reports/calabash/iphone-61-3.5in.json $TAGS
-#rbenv exec bundle exec cucumber -p sim71r            -f json -o ci-reports/calabash/iphone-71-3.5in.json $TAGS
-#
-#rbenv exec bundle exec cucumber -p sim61_ipad_r      -f json -o ci-reports/calabash/ipad-61.json $TAGS
-#rbenv exec bundle exec cucumber -p sim71_ipad_r      -f json -o ci-reports/calabash/ipad-71.json $TAGS
-#rbenv exec bundle exec cucumber -p sim71_ipad_r_64b  -f json -o ci-reports/calabash/ipad-71-64b.json $TAGS
-#
-#rbenv exec bundle exec cucumber -p sim61_sl     -f json -o ci-reports/calabash/ipad-61-no-instruments.json $TAGS
+rbenv exec bundle exec cucumber -p sim61_4in          -f json -o ci-reports/calabash/ipad-61-4in.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim71_4in          -f json -o ci-reports/calabash/iphone-71-4in.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim71_64b          -f json -o ci-reports/calabash/iphone-71-4in-64b.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim61r             -f json -o ci-reports/calabash/iphone-61-3.5in.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim71r             -f json -o ci-reports/calabash/iphone-71-3.5in.json $CUCUMBER_ARGS
+
+rbenv exec bundle exec cucumber -p sim61_ipad_r       -f json -o ci-reports/calabash/ipad-61.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim71_ipad_r       -f json -o ci-reports/calabash/ipad-71.json $CUCUMBER_ARGS
+rbenv exec bundle exec cucumber -p sim71_ipad_r_64b   -f json -o ci-reports/calabash/ipad-71-64b.json $CUCUMBER_ARGS
+
+rbenv exec bundle exec cucumber -p sim61_sl           -f json -o ci-reports/calabash/ipad-61-no-instruments.json $CUCUMBER_ARGS
 
 
 RETVAL=$?
