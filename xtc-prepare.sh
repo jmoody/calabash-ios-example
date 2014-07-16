@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if which rbenv > /dev/null; then
+    RBENV_EXEC="rbenv exec"
+else
+    RBENV_EXEC=
+fi
+
+${RBENV_EXEC} bundle install
+
 XAMARIN_DIR="${PWD}/xtc-staging"
 
 echo "INFO: creating the ./xtc-staging directory"
@@ -29,7 +37,7 @@ set +o errexit
 
 xcodebuild archive -project "${XC_PROJECT}" -scheme "${XC_SCHEME}" \
     -configuration "${CONFIG}" -archivePath "${ARCHIVE_BUNDLE}" \
-    -sdk iphoneos | bundle exec xcpretty -c
+    -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
 
 RETVAL=${PIPESTATUS[0]}
 
