@@ -4,11 +4,11 @@ source 'https://rubygems.org'
 # bundle config local.GEM_NAME /path/to/local/git/repository
 
 # noinspection RailsParamDefResolve
-gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'feature/reset-app-and-sim-content-and-settings'
-
-gem 'xcpretty', '~> 0.1.6'
-gem 'rake', '~> 10.3.2'
+gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'feature/proposed-gemfile-updates'
 
 # for xtc submit only
 # noinspection RailsParamDefResolve
 gem 'briar', :github => 'jmoody/briar', :branch => 'master'
+
+gem 'xcpretty', '~> 0.1.6'
+gem 'rake', '~> 10.3.2'
