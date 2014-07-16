@@ -29,24 +29,6 @@ module LaunchControl
   end
 end
 
-Before('@reset_app') do
-  launcher = LaunchControl.launcher
-  if launcher.simulator_target?
-    launcher.reset_app_sandbox
-  else
-    # no-op for devices
-  end
-end
-
-Before('@reset_simulator') do
-  launcher = LaunchControl.launcher
-  if launcher.simulator_target?
-    launcher.reset_simulator
-  else
-    # no-op for devices
-  end
-end
-
 Before do |scenario|
   launcher = LaunchControl.launcher
   unless launcher.calabash_no_launch?
