@@ -35,12 +35,24 @@ mkdir -p "${CAL_DISTRO_DIR}"
 
 set +o errexit
 
-xcodebuild archive \
-    -project "${XC_PROJECT}" \
-    -scheme "${XC_SCHEME}" \
-    -configuration "${CONFIG}" \
-    -archivePath "${ARCHIVE_BUNDLE}" \
-    -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
+if [ -z $TRAVIS ]; then
+    xcodebuild archive \
+        -project "${XC_PROJECT}" \
+        -scheme "${XC_SCHEME}" \
+        -configuration "${CONFIG}" \
+        -archivePath "${ARCHIVE_BUNDLE}" \
+        -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
+else
+    xcodebuild archive \
+        -project "${XC_PROJECT}" \
+        -scheme "${XC_SCHEME}" \
+        -configuration "${CONFIG}" \
+        -archivePath "${ARCHIVE_BUNDLE}" \
+        -exportSigningIdentity "${1}" \
+        -exportProvisioningProfile "${2}" \
+        -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
+fi
+
 
 RETVAL=${PIPESTATUS[0]}
 
