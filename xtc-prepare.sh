@@ -48,6 +48,9 @@ else
         -scheme "${XC_SCHEME}" \
         -configuration "${CONFIG}" \
         -archivePath "${ARCHIVE_BUNDLE}" \
+        -exportArchive \
+        -exportFormat IPA \
+        -exportPath "${XAMARIN_DIR}/${TARGET_NAME}.ipa"
         -exportSigningIdentity "${1}" \
         -exportProvisioningProfile "${2}" \
         -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
