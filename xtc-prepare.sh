@@ -56,8 +56,9 @@ set +o errexit
 if [ -z $TRAVIS ]; then
     xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}"  > /dev/null
 else
-    PROVISIONING_PROFILE="~/Library/MobileDevice/Provisioning Profiles/travis.mobileprovision"
-    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" --sign "iPhone Developer" --embed "${PROVISIONING_PROFILE}"
+    echo "INFO: will sign with ${1}"
+    echo "INFO: and embed ${2}"
+    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" --sign "${1}" --embed "${2}"
 fi
 
 RETVAL=$?
