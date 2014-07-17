@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 # bundle config local.GEM_NAME /path/to/local/git/repository
 
 # noinspection RailsParamDefResolve
-gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'feature/proposed-gemfile-updates'
+gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => 'feature/gemspec-dependencies-should-use-semantic-versioning'
 
 # for xtc submit only
 # noinspection RailsParamDefResolve
