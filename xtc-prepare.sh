@@ -35,8 +35,11 @@ mkdir -p "${CAL_DISTRO_DIR}"
 
 set +o errexit
 
-xcodebuild archive -project "${XC_PROJECT}" -scheme "${XC_SCHEME}" \
-    -configuration "${CONFIG}" -archivePath "${ARCHIVE_BUNDLE}" \
+xcodebuild archive \
+    -project "${XC_PROJECT}" \
+    -scheme "${XC_SCHEME}" \
+    -configuration "${CONFIG}" \
+    -archivePath "${ARCHIVE_BUNDLE}" \
     -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
 
 RETVAL=${PIPESTATUS[0]}
@@ -50,7 +53,11 @@ fi
 
 set +o errexit
 
-xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" > /dev/null
+if [ -z $TRAVIS ]; then
+    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}"  > /dev/null
+else
+    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" --sign "iPhone Developer" > /dev/null
+fi
 
 RETVAL=$?
 
