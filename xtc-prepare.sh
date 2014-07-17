@@ -56,7 +56,7 @@ set +o errexit
 if [ -z $TRAVIS ]; then
     xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}"  > /dev/null
 else
-    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" --sign "iPhone Developer" > /dev/null
+    xcrun -sdk iphoneos PackageApplication -v "${PWD}/${APP_BUNDLE_PATH}" -o "${PWD}/${IPA_PATH}" --sign "iPhone Developer" --embed "${TRAVIS_PROVISIONING_PROFILE}" > /dev/null
 fi
 
 RETVAL=$?
