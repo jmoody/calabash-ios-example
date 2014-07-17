@@ -64,8 +64,14 @@ $RBENV_EXEC bundle exec cucumber -p sim61_4in          -f json -o ci-reports/cal
 RETVAL=$(($RETVAL+$?))
 $RBENV_EXEC bundle exec cucumber -p sim71_4in          -f json -o ci-reports/calabash/iphone-71-4in.json $CUCUMBER_ARGS
 RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71_64b          -f json -o ci-reports/calabash/iphone-71-4in-64b.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
+
+if [ -z $TRAVIS ]; then
+    $RBENV_EXEC bundle exec cucumber -p sim71_64b          -f json -o ci-reports/calabash/iphone-71-4in-64b.json $CUCUMBER_ARGS
+    RETVAL=$(($RETVAL+$?))
+else
+    $RBENV_EXEC bundle exec cucumber -p sim70_64b          -f json -o ci-reports/calabash/iphone-70-4in-64b.json $CUCUMBER_ARGS
+    RETVAL=$(($RETVAL+$?))
+fi
 
 $RBENV_EXEC bundle exec cucumber -p sim61r             -f json -o ci-reports/calabash/iphone-61-3.5in.json $CUCUMBER_ARGS
 RETVAL=$(($RETVAL+$?))
