@@ -8,7 +8,9 @@ gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => 'feature/g
 
 # for xtc submit only
 # noinspection RailsParamDefResolve
-gem 'briar', '~>1.1'
+unless ENV['TRAVIS']
+  gem 'briar', '~>1.1'
+end
 
 gem 'xcpretty', '~> 0.1.6'
 gem 'rake', '~> 10.3.2'
