@@ -31,7 +31,7 @@ end
 
 Before('@reset_app') do
   launcher = LaunchControl.launcher
-  if launcher.simulator_target?
+  if launcher.simulator_target? or xamarin_test_cloud?
     launcher.reset_app_sandbox
   else
     # no-op for devices
