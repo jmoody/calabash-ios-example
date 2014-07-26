@@ -4,7 +4,8 @@ source 'https://rubygems.org'
 # bundle config local.GEM_NAME /path/to/local/git/repository
 
 # noinspection RailsParamDefResolve
-gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'master'
+gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'feature/should-run-xtc-test-in-ci'
+gem 'run_loop', :github => 'calabash/run_loop', :branch => 'feature/finding-xcode6-tracetemplate'
 
 # for xtc submit only
 # noinspection RailsParamDefResolve
