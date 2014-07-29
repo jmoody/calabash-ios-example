@@ -20,11 +20,21 @@
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
 
-- (void)dealloc
-{
-    [_window release];
-    [_tabBarController release];
-    [super dealloc];
+- (void)dealloc {
+  [_window release];
+  [_tabBarController release];
+  [super dealloc];
+}
+
+- (NSString *) stringForDefaultsDictionary:(NSString *) aIgnore {
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults synchronize];
+  NSDictionary *dictionary = [defaults dictionaryRepresentation];
+  NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                 options:0
+                                                   error:nil];
+  NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  return string;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
