@@ -31,7 +31,7 @@ mkdir -p "${CAL_BUILD_DIR}"
 
 set +o errexit
 
-xcodebuild \
+xcrun xcodebuild \
     -derivedDataPath "${CAL_BUILD_DIR}" \
     -project "${XC_PROJECT}" \
     -scheme "${TARGET_NAME}" \
