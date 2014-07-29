@@ -16,10 +16,7 @@ ci-reports
 xtc-staging
 
 # Jetbrains
-workspace.xml
-find.xml
-*.iml
-.rakeTasks
+.idea
 
 # ruby
 .irb-history
