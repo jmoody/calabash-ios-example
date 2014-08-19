@@ -4,12 +4,11 @@ source 'https://rubygems.org'
 # bundle config local.GEM_NAME /path/to/local/git/repository
 
 # noinspection RailsParamDefResolve
-gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'feature/should-run-xtc-test-in-ci'
-gem 'run_loop', :github => 'calabash/run_loop', :branch => 'feature/finding-xcode6-tracetemplate'
+gem 'calabash-cucumber', :github => 'jmoody/calabash-ios', :branch => 'feature/gemspec-needs-to-include-playback-resource-files'
 
 # for xtc submit only
 # noinspection RailsParamDefResolve
 gem 'briar', :github => 'jmoody/briar', :branch => 'master'
 
-gem 'xcpretty', '~> 0.1.6'
-gem 'rake', '~> 10.3.2'
+gem 'xcpretty', '~> 0.1'
+gem 'rake', '~> 10.3'

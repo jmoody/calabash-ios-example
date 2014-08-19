@@ -17,7 +17,7 @@ end
 Before do |scenario|
   launcher = LaunchControl.launcher
   unless launcher.calabash_no_launch?
-    launcher.relaunch
+    launcher.relaunch({:launch_retries => 1})
     launcher.calabash_notify(self)
   end
 end
