@@ -37,6 +37,40 @@
   return string;
 }
 
+- (NSString *)simulatorPreferencesPath:(NSString *) aIgnore {
+  static NSString *path = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    NSString *plistRootPath = nil, *relativePlistPath = nil;
+    NSString *plistName = [NSString stringWithFormat:@"%@.plist", [[NSBundle mainBundle] bundleIdentifier]];
+
+    // 1. get into the simulator's app support directory by fetching the sandboxed Library's path
+
+    NSArray *userLibDirURLs = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+
+    NSURL *userDirURL = [userLibDirURLs lastObject];
+    NSString *userDirectoryPath = [userDirURL path];
+
+    // 2. get out of our application directory, back to the root support directory for this system version
+    if ([userDirectoryPath rangeOfString:@"CoreSimulator"].location == NSNotFound) {
+      plistRootPath = [userDirectoryPath substringToIndex:([userDirectoryPath rangeOfString:@"Applications"].location)];
+    } else {
+      NSRange range = [userDirectoryPath rangeOfString:@"data"];
+      plistRootPath = [userDirectoryPath substringToIndex:range.location + range.length];
+    }
+
+    // 3. locate, relative to here, /Library/Preferences/[bundle ID].plist
+    relativePlistPath = [NSString stringWithFormat:@"Library/Preferences/%@", plistName];
+
+    // 4. and unescape spaces, if necessary (i.e. in the simulator)
+    NSString *unsanitizedPlistPath = [plistRootPath stringByAppendingPathComponent:relativePlistPath];
+    path = [[unsanitizedPlistPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] copy];
+  });
+  NSLog(@"sim pref path = %@", path);
+  return path;
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
