@@ -9,7 +9,7 @@ xamarin_dir = "#{ENV['HOME']}/.xamarin"
 
 devices = {}
 
-device_list = ['pluto', 'neptune', 'venus', 'earp', 'mars', 'saturn']
+device_list = ['pluto', 'neptune', 'venus', 'earp', 'mars', 'saturn', 'pegasi']
 
 device_list.each do |device|
   dir = "#{xamarin_dir}/devices/#{device}"
@@ -46,6 +46,7 @@ venus_html:   -f 'Calabash::Formatters::Html' -o <%= devices[:venus][:report] %>
 earp_html:    -f 'Calabash::Formatters::Html' -o <%= devices[:earp][:report] %>
 mars_html:    -f 'Calabash::Formatters::Html' -o <%= devices[:mars][:report] %>
 saturn_html:  -f 'Calabash::Formatters::Html' -o <%= devices[:saturn][:report] %>
+pegasi_html:  -f 'Calabash::Formatters::Html' -o <%= devices[:pegasi][:report] %>
 
 pluto_ss:   SCREENSHOT_PATH=<%= devices[:pluto][:ss_path] %>
 neptune_ss: SCREENSHOT_PATH=<%= devices[:neptune][:ss_path] %>
@@ -53,6 +54,7 @@ venus_ss:   SCREENSHOT_PATH=<%= devices[:venus][:ss_path] %>
 earp_ss:    SCREENSHOT_PATH=<%= devices[:earp][:ss_path] %>
 mars_ss:    SCREENSHOT_PATH=<%= devices[:mars][:ss_path] %>
 saturn_ss:  SCREENSHOT_PATH=<%= devices[:saturn][:ss_path] %>
+pegasi_ss:  SCREENSHOT_PATH=<%= devices[:pegasi][:ss_path] %>
 
 no_launch:    NO_LAUNCH=1 --tags ~@launch
 do_launch:    NO_LAUNCH=0 --tags ~@no_launch
@@ -64,9 +66,12 @@ no_stop:      NO_STOP=1
 ipad:   DEVICE=ipad   -p common --tags ~@iphone --tags ~@iphone_only
 iphone: DEVICE=iphone -p common --tags ~@ipad --tags ~@ipad_only
 
-simulator:     -p common -p ss_path -p html_report --tags ~@device_only --tags ~@device
+abp:           APP_BUNDLE_PATH='./LPSimpleExample-cal.app'
+simulator:     -p common -p ss_path -p html_report --tags ~@device_only --tags ~@device -p abp
 sim_launch:    -p simulator -p do_launch -p no_reset_btw -p no_stop
 sim_no_launch: -p simulator -p no_launch -p no_reset_btw
+
+ios8:  -p simulator -p sim_launch DEVICE_TARGET='iPhone 5 (7.1 Simulator)'
 
 sim61:     -p sim_launch    DEVICE_TARGET='iPhone (3.5-inch) - Simulator - iOS 6.1'
 sim61_nl:  -p sim_no_launch DEVICE_TARGET='iPhone (3.5-inch) - Simulator - iOS 6.1'
@@ -127,3 +132,6 @@ mars:          -p mars_common -p do_launch -p no_stop
 
 saturn_common:   DEVICE_TARGET=<%= devices[:saturn][:udid] %> DEVICE_ENDPOINT=<%= devices[:saturn][:ip] %> -p device_common -p iphone -p saturn_html -p saturn_ss
 saturn:          -p saturn_common -p do_launch -p no_stop
+
+pegasi_common:   DEVICE_TARGET=<%= devices[:pegasi][:udid] %> DEVICE_ENDPOINT=<%= devices[:pegasi][:ip] %> -p device_common -p iphone -p pegasi_html -p pegasi_ss
+pegasi:          -p pegasi_common -p do_launch -p no_stop

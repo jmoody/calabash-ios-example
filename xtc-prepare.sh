@@ -35,7 +35,7 @@ mkdir -p "${CAL_DISTRO_DIR}"
 
 set +o errexit
 
-xcodebuild archive -project "${XC_PROJECT}" -scheme "${XC_SCHEME}" \
+xcrun xcodebuild archive -project "${XC_PROJECT}" -scheme "${XC_SCHEME}" \
     -configuration "${CONFIG}" -archivePath "${ARCHIVE_BUNDLE}" \
     -sdk iphoneos | ${RBENV_EXEC} bundle exec xcpretty -c
 

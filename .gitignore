@@ -11,15 +11,14 @@ __MACOSX
 # ci
 build
 ci-reports
+*.app
+*.ipa
 
 # the xamarin build directory
 xtc-staging
 
 # Jetbrains
-workspace.xml
-find.xml
-*.iml
-.rakeTasks
+.idea
 
 # ruby
 .irb-history
