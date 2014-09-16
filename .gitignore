@@ -11,6 +11,8 @@ __MACOSX
 # ci
 build
 ci-reports
+*.app
+*.ipa
 
 # the xamarin build directory
 xtc-staging
