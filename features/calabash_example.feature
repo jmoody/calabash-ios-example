@@ -1,4 +1,4 @@
-Feature: to reset or not reset
+Feature: some smoke tests
 
   Background: I should see the first view
     Given I see the first view
