@@ -26,15 +26,28 @@
   [super dealloc];
 }
 
-- (NSString *) stringForDefaultsDictionary:(NSString *) aIgnore {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  [defaults synchronize];
-  NSDictionary *dictionary = [defaults dictionaryRepresentation];
-  NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary
+- (NSString *) JSONStringWithArray:(NSArray *) aArray {
+  NSData *data = [NSJSONSerialization dataWithJSONObject:aArray
                                                  options:0
                                                    error:nil];
   NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   return string;
+}
+
+- (NSString *) JSONStringWithDictionary:(NSDictionary *) aDictionary {
+  NSData *data = [NSJSONSerialization dataWithJSONObject:aDictionary
+                                                 options:0
+                                                   error:nil];
+  NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  return string;
+}
+
+
+- (NSString *) stringForDefaultsDictionary:(NSString *) aIgnore {
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults synchronize];
+  NSDictionary *dictionary = [defaults dictionaryRepresentation];
+  return [self JSONStringWithDictionary:dictionary];
 }
 
 - (NSString *)simulatorPreferencesPath:(NSString *) aIgnore {
@@ -70,6 +83,84 @@
   return path;
 }
 
+- (NSString *) stringForPathToDocumentsDirectory {
+  NSArray *dirPaths =
+  NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                      NSUserDomainMask,
+                                      YES);
+  return dirPaths[0];
+}
+
+
+- (NSString *) stringForPathToLibraryDirectoryForUserp:(BOOL) forUser {
+  NSSearchPathDomainMask mask;
+  if (forUser == YES) {
+    mask = NSUserDomainMask;
+  } else {
+    mask = NSLocalDomainMask;
+  }
+  NSArray *dirPaths =
+  NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
+                                      mask,
+                                      YES);
+  return dirPaths[0];
+}
+
+- (NSString *) stringForPathToSandboxDirectory:(NSString *) aSandboxDirectory {
+  NSArray *allowed = @[@"tmp", @"Documents", @"Library"];
+  NSUInteger idx = [allowed indexOfObject:aSandboxDirectory];
+  if (idx == NSNotFound) {
+    NSLog(@"expected '%@' to be one of '%@'", aSandboxDirectory, allowed);
+    return nil;
+  }
+  NSString *path = nil;
+  if ([aSandboxDirectory isEqualToString:@"Documents"]) {
+    path = [self stringForPathToDocumentsDirectory];
+  } else if ([aSandboxDirectory isEqualToString:@"Library"]) {
+    path = [self stringForPathToLibraryDirectoryForUserp:YES];
+  } else {
+    NSString *libPath = [self stringForPathToLibraryDirectoryForUserp:YES];
+    NSString *containingDir = [libPath stringByDeletingLastPathComponent];
+    path = [containingDir stringByAppendingPathComponent:@"tmp"];
+  }
+
+  NSLog(@"path = %@", path);
+  return path;
+}
+
+- (NSArray *) arrayForFilesInSandboxDirectory:(NSString *) aSandboxDirectory {
+  NSString *path = [self stringForPathToSandboxDirectory:aSandboxDirectory];
+  if (!path) { return nil; }
+  NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
+                                                                                   error:NULL];
+  return directoryContents;
+}
+
+
+- (NSString *) addFileToSandboxDirectory:(NSString *) aJSONDictionary {
+  NSData *argData = [aJSONDictionary dataUsingEncoding:NSUTF8StringEncoding];
+  NSDictionary *details = [NSJSONSerialization JSONObjectWithData:argData options:0 error:NULL];
+
+  NSString *directory = details[@"directory"];
+  if (!directory) {
+    NSLog(@"Expected value for key 'directory' in %@", details);
+    return nil;
+  }
+  NSString *filename = details[@"filename"];
+  if (!filename) {
+    NSLog(@"Expected value for key 'filename' in %@", details);
+    return nil;
+  }
+
+  NSString *directoryPath = [self stringForPathToSandboxDirectory:directory];
+  if (!directoryPath) { return nil; }
+
+  NSString *path = [directoryPath stringByAppendingPathComponent:filename];
+  NSString *contents = @"Boo!";
+  NSData *fileData = [contents dataUsingEncoding:NSUTF8StringEncoding];
+  [fileData writeToFile:path atomically:YES];
+  return filename;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
