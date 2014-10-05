@@ -2,6 +2,34 @@
 
 require 'run_loop'
 
+date = Time.now.strftime('%Y-%m-%d-%H%M-%S')
+
+FileUtils.mkdir("./screenshots") unless File.exists?("./screenshots")
+FileUtils.mkdir("./reports") unless File.exists?("./reports")
+
+xamarin_dir = "#{ENV['HOME']}/.xamarin"
+
+devices = {}
+
+device_list = ['pluto', 'neptune', 'venus', 'earp', 'mars', 'pegasi', 'saturn', 'hatp']
+
+device_list.each do |device|
+  dir = "#{xamarin_dir}/devices/#{device}"
+  ip = IO.read("#{dir}/ip") if File.exists?("#{dir}/ip")
+  udid = IO.read("#{dir}/udid") if File.exists?("#{dir}/udid")
+  report = "./reports/#{device}/#{date}-#{device}.html"
+  ss_path = "./reports/#{device}/screenshots/"
+  ht = {:dir => dir,
+        :ip => ip,
+        :udid => udid,
+        :report => report,
+        :ss_path => ss_path}
+  devices[device.to_sym] = ht
+
+  FileUtils.mkdir("./reports/#{device}") unless File.exists?("./reports/#{device}")
+  FileUtils.mkdir("./reports/#{device}/screenshots") unless File.exists?("./reports/#{device}/screenshots")
+end
+
 xcode_tools = RunLoop::XCTools.new
 sims = {}
 if xcode_tools.xcode_version_gte_6?
@@ -114,3 +142,12 @@ iphone_latest:      -p simulator DEVICE_TARGET="<%= sims[:iphone_latest] %>"
 iphone_largest:     -p simulator DEVICE_TARGET="<%= sims[:iphone_largest] %>"
 
 default:            -p simulator -p iphone_tags DEVICE_TARGET="<%= sims[:default] %>"
+
+# required only for devices
+bundle_id:    BUNDLE_ID=com.lesspainful.example.LPSimpleExample-cal
+
+device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
+
+hatp:  DEVICE_TARGET=<%= devices[:hatp][:udid] %> DEVICE_ENDPOINT=<%= devices[:hatp][:ip] %> -p device_common
+neptune:  DEVICE_TARGET=<%= devices[:neptune][:udid] %> DEVICE_ENDPOINT=<%= devices[:neptune][:ip] %> -p device_common
+
