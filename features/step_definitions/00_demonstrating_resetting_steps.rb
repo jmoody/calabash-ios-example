@@ -104,7 +104,10 @@ Given(/^I turn the switch on$/) do
     # having a very hard time touching this switch. :(
     # wait_tap does work. :(
     sleep(1.0)
+
+    #uia("target.frontMostApp().mainWindow().elements()['first page'].switches()['switch'].setValue(1)")
     touch qstr_for_switch
+
     sleep(0.5)
 
     # trying to debug iOS 8 NSUserDefaults problem.
