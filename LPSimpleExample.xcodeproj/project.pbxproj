@@ -634,7 +634,7 @@
 				B137ADFD143F6EBF007184CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B137ADFE143F6EBF007184CB /* Build configuration list for PBXNativeTarget "LPSimpleExample" */ = {
 			isa = XCConfigurationList;
@@ -643,7 +643,7 @@
 				B137AE00143F6EBF007184CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		dab93ac118f92bcc8313c3af /* Build configuration list for PBXNativeTarget "LPSimpleExample-cal" */ = {
 			isa = XCConfigurationList;
@@ -652,7 +652,7 @@
 				55ed6e500c52b83c534de753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
