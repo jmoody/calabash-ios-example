@@ -1,3 +1,4 @@
+@wip
 Feature: some smoke tests
 
   Background: I should see the first view
