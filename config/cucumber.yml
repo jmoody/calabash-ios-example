@@ -150,4 +150,6 @@ device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
 
 hatp:  DEVICE_TARGET=<%= devices[:hatp][:udid] %> DEVICE_ENDPOINT=<%= devices[:hatp][:ip] %> -p device_common
 neptune:  DEVICE_TARGET=<%= devices[:neptune][:udid] %> DEVICE_ENDPOINT=<%= devices[:neptune][:ip] %> -p device_common
+venus:  DEVICE_TARGET=<%= devices[:venus][:udid] %> DEVICE_ENDPOINT=<%= devices[:venus][:ip] %> -p device_common
+mars:  DEVICE_TARGET=<%= devices[:mars][:udid] %> DEVICE_ENDPOINT=<%= devices[:mars][:ip] %> -p device_common
 
