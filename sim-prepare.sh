@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-if [ "$USER" = "jenkins" ]; then
-    echo "INFO: hey, you are jenkins!  loading ~/.bash_profile_ci"
-    source ~/.bash_profile_ci
-    hash -r
-    rbenv rehash
-fi
-
 if which rbenv > /dev/null; then
     RBENV_EXEC="rbenv exec"
 else
