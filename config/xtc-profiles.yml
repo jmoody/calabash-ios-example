@@ -5,11 +5,12 @@ not_sim:     --tags ~@simulator --tags ~@simulator_only
 no_launch:   --tags ~@no_launch
 iphone_only: --tags ~@ipad --tags ~@ipad_only
 ipad_only:   --tags ~@iphone --tags ~@iphone_only
-cucumber_args: --backtrace
 
-tags:        -p not_xtc -p not_sim -p no_launch
+args:        --expand --backtrace --no-multiline
+tags:        -p not_xtc -p not_sim -p no_launch -p args
 
-default:     -p tags --backtrace
+default:     -p tags
+ci:          -p tags --tags ~@no_ci
 
 wip:         -p tags --tags @wip
 flicker:     -p tags --tags @flickering

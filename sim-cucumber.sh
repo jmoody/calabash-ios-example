@@ -62,27 +62,9 @@ export APP_BUNDLE_PATH="./${TARGET_NAME}.app"
 
 RETVAL=0
 
-$RBENV_EXEC bundle exec cucumber -p sim61_4in          -f json -o ci-reports/calabash/ipad-61-4in.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71_4in          -f json -o ci-reports/calabash/iphone-71-4in.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71_64b          -f json -o ci-reports/calabash/iphone-71-4in-64b.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
+rbenv exec bundle exec cucumber -p iphone_largest $CUCUMBER_ARGS
+#rbenv exec bundle exec cucumber -p default $CUCUMBER_ARGS
 
-$RBENV_EXEC bundle exec cucumber -p sim61r             -f json -o ci-reports/calabash/iphone-61-3.5in.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71r             -f json -o ci-reports/calabash/iphone-71-3.5in.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-
-$RBENV_EXEC bundle exec cucumber -p sim61_ipad_r       -f json -o ci-reports/calabash/ipad-61.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71_ipad_r       -f json -o ci-reports/calabash/ipad-71.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-$RBENV_EXEC bundle exec cucumber -p sim71_ipad_r_64b   -f json -o ci-reports/calabash/ipad-71-64b.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
-
-$RBENV_EXEC bundle exec cucumber -p sim61_sl           -f json -o ci-reports/calabash/ipad-61-no-instruments.json $CUCUMBER_ARGS
-RETVAL=$(($RETVAL+$?))
 
 set -o errexit
 

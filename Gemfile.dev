@@ -1,9 +1,10 @@
-source 'https://rubygems.org'
+B1;2csource 'https://rubygems.org'
 
 # use bundle and bundle config to specify local gem locations
 # bundle config local.GEM_NAME /path/to/local/git/repository
 
 # noinspection RailsParamDefResolve
+
 gem 'run_loop', :github => 'calabash/run_loop', :branch => 'develop'
 gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'develop'
 
@@ -13,3 +14,6 @@ gem 'briar', :github => 'jmoody/briar', :branch => 'master'
 
 gem 'xcpretty', '~> 0.1'
 gem 'rake', '~> 10.3'
+
+gem 'pry'
+gem 'pry-nav'

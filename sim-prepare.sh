@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-if [ "$USER" = "jenkins" ]; then
-    echo "INFO: hey, you are jenkins!  loading ~/.bash_profile_ci"
-    source ~/.bash_profile_ci
-    hash -r
-    rbenv rehash
-fi
-
 if which rbenv > /dev/null; then
     RBENV_EXEC="rbenv exec"
 else
@@ -32,6 +25,7 @@ mkdir -p "${CAL_BUILD_DIR}"
 set +o errexit
 
 xcrun xcodebuild \
+    -SYMROOT="${CAL_BUILD_DIR}" \
     -derivedDataPath "${CAL_BUILD_DIR}" \
     -project "${XC_PROJECT}" \
     -scheme "${TARGET_NAME}" \
@@ -55,3 +49,4 @@ $RBENV_EXEC bundle exec calabash-ios sim reset
 
 APP_BUNDLE_PATH="${CAL_BUILD_DIR}/Build/Products/${CAL_BUILD_CONFIG}-iphonesimulator/${TARGET_NAME}.app"
 cp -r "${APP_BUNDLE_PATH}" ./
+echo "export APP=${APP_BUNDLE_PATH}"

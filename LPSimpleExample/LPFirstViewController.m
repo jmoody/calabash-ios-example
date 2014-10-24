@@ -71,9 +71,6 @@ static NSString *const kUserDefaultsSwitchState = @"com.xamarin.lpsimpleexample 
   BOOL state = sender.isOn;
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   [defaults setBool:state forKey:kUserDefaultsSwitchState];
-  // would normally call this in the UIApplicationDelegate state changing
-  // methods but I want to ensure the state is persisted even if the app
-  // crashes
   [defaults synchronize];
 }
 
