@@ -10,6 +10,7 @@ Feature:  can persist a keychain item over app restart
   Scenario: 00 I set the keychain item
     Given that the keychain contains the account password "pa$$w0rd" for "clever_user98"
 
+  @not_xtc
   @keychain
   Scenario: 01 I should see the keychain item exists in the next Scenario
     Then the keychain should contain the account password "pa$$w0rd" for "clever_user98"
@@ -26,11 +27,13 @@ Feature:  can persist a keychain item over app restart
   Scenario: 10 I set the keychain item
     Given that the keychain contains the account password "pa$$w0rd" for "clever_user98"
 
+  @not_xtc
   @keychain
   @reset_simulator
   Scenario: 11 I should see the keychain item exists because I did not reset the simulator before this Scenario
     Then the keychain should contain the account password "pa$$w0rd" for "clever_user98"
 
+  @not_xtc
   @keychain
   @reset_simulator
   @reset_simulator_before_hook
