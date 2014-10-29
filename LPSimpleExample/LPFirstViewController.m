@@ -129,6 +129,21 @@ static NSString *const kUserDefaultsSwitchState = @"com.xamarin.lpsimpleexample 
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   [defaults setBool:state forKey:kUserDefaultsSwitchState];
   [defaults synchronize];
+
+  /*
+   Xcode 6.1 / iOS 8.1 => confirmed that the key/value is written and then
+   clobbered by UIAutomation preferences API
+  NSString *path = [self simulatorPreferencesPath];
+  NSDictionary *dictionary =[NSDictionary dictionaryWithContentsOfFile:path];
+  BOOL found = NO;
+  while(!found) {
+    NSNumber *number = [dictionary objectForKey:kUserDefaultsSwitchState];
+    NSLog(@"number for %@ = %@", kUserDefaultsSwitchState, number);
+    if (number) {
+      found = [number boolValue] == state;
+    }
+  }
+  */
 }
 
 #pragma mark - View Lifecycle
