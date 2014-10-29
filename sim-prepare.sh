@@ -45,6 +45,7 @@ else
 fi
 
 # remove any stale targets
+echo "INFO: reseting simulator content and settings"
 $RBENV_EXEC bundle exec calabash-ios sim reset
 
 APP_BUNDLE_PATH="${CAL_BUILD_DIR}/Build/Products/${CAL_BUILD_CONFIG}-iphonesimulator/${TARGET_NAME}.app"
