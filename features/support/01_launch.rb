@@ -55,10 +55,7 @@ end
 
 After do |scenario|
   launcher = LaunchControl.launcher
-  calabash_exit
-  if launcher.active?
-    launcher.stop
-  end
+  calabash_exit unless launcher.calabash_no_stop?
 end
 
 at_exit do
