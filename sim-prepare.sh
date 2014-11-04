@@ -50,4 +50,4 @@ $RBENV_EXEC bundle exec calabash-ios sim reset
 
 APP_BUNDLE_PATH="${CAL_BUILD_DIR}/Build/Products/${CAL_BUILD_CONFIG}-iphonesimulator/${TARGET_NAME}.app"
 cp -r "${APP_BUNDLE_PATH}" ./
-echo "export APP=${APP_BUNDLE_PATH}"
+echo "export APP=${PWD}/${TARGET_NAME}.app"
