@@ -1,16 +1,10 @@
-B1;2csource 'https://rubygems.org'
-
-# use bundle and bundle config to specify local gem locations
-# bundle config local.GEM_NAME /path/to/local/git/repository
-
-# noinspection RailsParamDefResolve
+source 'https://rubygems.org'
 
 gem 'run_loop', :github => 'calabash/run_loop', :branch => 'develop'
 gem 'calabash-cucumber', :github => 'calabash/calabash-ios', :branch => 'develop'
 
-# for xtc submit only
-# noinspection RailsParamDefResolve
-gem 'briar', :github => 'jmoody/briar', :branch => 'master'
+# For the workflow tools; not for calabash cucumber API extensions.
+gem 'briar', :github => 'jmoody/briar', :branch => 'develop'
 
 gem 'xcpretty', '~> 0.1'
 gem 'rake', '~> 10.3'
