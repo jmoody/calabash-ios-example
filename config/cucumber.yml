@@ -11,7 +11,7 @@ xamarin_dir = "#{ENV['HOME']}/.xamarin"
 
 devices = {}
 
-device_list = ['pluto', 'neptune', 'venus', 'earp', 'mars', 'pegasi', 'uranus', 'hatp']
+device_list = ['pluto', 'neptune', 'venus', 'earp', 'mars', 'pegasi', 'uranus', 'hat', 'denis']
 
 device_list.each do |device|
   dir = "#{xamarin_dir}/devices/#{device}"
@@ -179,9 +179,10 @@ default:            -p simulator -p iphone_tags DEVICE_TARGET="<%= sims[:default
 # required only for devices
 bundle_id:    BUNDLE_ID=com.lesspainful.example.LPSimpleExample-cal
 
-device_common:  -p bundle_id --tags ~@simulator --tags ~@simulator_only
+device_common:  -p common -p bundle_id --tags ~@simulator --tags ~@simulator_only
 
-hatp:  DEVICE_TARGET=<%= devices[:hatp][:udid] %> DEVICE_ENDPOINT=<%= devices[:hatp][:ip] %> -p device_common
+hat:  DEVICE_TARGET=<%= devices[:hat][:udid] %> DEVICE_ENDPOINT=<%= devices[:hat][:ip] %> -p device_common
+denis:  DEVICE_TARGET=<%= devices[:denis][:udid] %> DEVICE_ENDPOINT=<%= devices[:denis][:ip] %> -p device_common
 neptune:  DEVICE_TARGET=<%= devices[:neptune][:udid] %> DEVICE_ENDPOINT=<%= devices[:neptune][:ip] %> -p device_common
 venus:  DEVICE_TARGET=<%= devices[:venus][:udid] %> DEVICE_ENDPOINT=<%= devices[:venus][:ip] %> -p device_common
 mars:  DEVICE_TARGET=<%= devices[:mars][:udid] %> DEVICE_ENDPOINT=<%= devices[:mars][:ip] %> -p device_common
