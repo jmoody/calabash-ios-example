@@ -1,5 +1,4 @@
-@wip
-Feature: some smoke tests
+Feature: Say 'Hello' to the first view
 
   Background: I should see the first view
     Given I see the first view
