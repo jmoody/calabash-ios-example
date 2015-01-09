@@ -15,3 +15,8 @@ ipa:
 app:
 	rm -rf LPSimpleExample-cal.app
 	./sim-prepare.sh
+
+install_test_binaries:
+	$(MAKE) all
+	./install-test-binaries.rb
+
