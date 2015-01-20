@@ -9,9 +9,14 @@ clean:
 
 ipa:
 	rm -rf LPSimpleExample-cal.ipa
-	xtc-prepare.sh
+	./xtc-prepare.sh
 	cp xtc-staging/LPSimpleExample-cal.ipa ./
 
 app:
 	rm -rf LPSimpleExample-cal.app
-	sim-prepare.sh
+	./sim-prepare.sh
+
+install_test_binaries:
+	$(MAKE) all
+	./install-test-binaries.rb
+
