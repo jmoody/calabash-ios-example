@@ -61,9 +61,10 @@ Feature:  can persist a keychain item over app restart
     Then I should see the files I put in the sandbox
     Then I should see the switch is on
 
-  @user_defaults
-  @reset_app_btw_scenarios
-  @reset_app_before_hook
-  Scenario: 22 The switch should be off because I did reset the app before this Scenario
-    Then I should not see the files I put in the sandbox
-    Then I should see the switch is off
+# Disable for now to debug the user defaults + UIAutomation preferences API bugs
+#  @user_defaults
+#  @reset_app_btw_scenarios
+#  @reset_app_before_hook
+#  Scenario: 22 The switch should be off because I did reset the app before this Scenario
+#    Then I should not see the files I put in the sandbox
+#    Then I should see the switch is off

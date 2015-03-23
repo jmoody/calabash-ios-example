@@ -66,12 +66,84 @@ static NSString *const kUserDefaultsSwitchState = @"com.xamarin.lpsimpleexample 
 
 #pragma mark - Actions
 
+- (NSString *)simulatorPreferencesPath {
+  static NSString *path = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+
+    NSString *plistName = [NSString stringWithFormat:@"%@.plist", [[NSBundle mainBundle] bundleIdentifier]];
+
+    // 1. Find the app's Library directory so we can deduce the plist path.
+    NSArray *userLibDirURLs = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+    NSURL *userLibraryURL = [userLibDirURLs lastObject];
+    NSString *userLibraryPath = [userLibraryURL path];
+
+    // 2. Use the the library path to deduce the simulator environment.
+
+    if ([userLibraryPath rangeOfString:@"CoreSimulator"].location == NSNotFound) {
+      // 3. Xcode < 6 environment.
+      NSString *sandboxPath = [userLibraryPath substringToIndex:([userLibraryPath rangeOfString:@"Applications"].location)];
+      NSString *relativePlistPath = [NSString stringWithFormat:@"Library/Preferences/%@", plistName];
+      NSString *unsanitizedPlistPath = [sandboxPath stringByAppendingPathComponent:relativePlistPath];
+      path = [[unsanitizedPlistPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] copy];
+    } else {
+
+      /*
+       3. CoreSimulator environments
+
+       * In Xcode 6.1 + iOS >= 8.1, UIAutomation and NSUserDefaults do IO on
+       the same plist in the app's sandbox.
+       * In Xcode 6.1 and iOS < 8.1, UIAutomation does IO on the a file in
+       < SIM DIRECTORY >/data/Library/Preferences/ and NSUserDefaults does
+       IO on a plist in the app's sandbox.
+       * In Xcode 6.0*, NSUserDefaults and UIAutomation do IO on the same plist
+       in < SIM DIRECTORY >/data/Library/Preferences.
+
+       Since iOS 8.1 only ships with Xcode 6.1, we can check the system version
+       at runtime and choose the correct plist.
+       */
+
+      NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+      if ([systemVersion compare:@"8.1" options:NSNumericSearch] != NSOrderedAscending) {
+        NSString *relativePlistPath = [NSString stringWithFormat:@"Preferences/%@", plistName];
+        NSString *unsanitizedPlistPath = [userLibraryPath stringByAppendingPathComponent:relativePlistPath];
+        path = [[unsanitizedPlistPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] copy];
+      } else {
+        NSRange range = [userLibraryPath rangeOfString:@"data"];
+        NSString *simulatorDataPath = [userLibraryPath substringToIndex:range.location + range.length];
+        NSString *relativePlistPath = [NSString stringWithFormat:@"Library/Preferences/%@", plistName];
+        NSString *unsanitizedPlistPath = [simulatorDataPath stringByAppendingPathComponent:relativePlistPath];
+        path = [[unsanitizedPlistPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding] copy];
+      }
+    }
+  });
+  NSLog(@"NSUserDefaults path = %@", path);
+  return path;
+}
+
+
+
 - (void) switchValueChanged:(UISwitch *) sender {
   NSLog(@"switch value changed");
   BOOL state = sender.isOn;
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   [defaults setBool:state forKey:kUserDefaultsSwitchState];
   [defaults synchronize];
+
+  /*
+   Xcode 6.1 / iOS 8.1 => confirmed that the key/value is written and then
+   clobbered by UIAutomation preferences API
+  NSString *path = [self simulatorPreferencesPath];
+  NSDictionary *dictionary =[NSDictionary dictionaryWithContentsOfFile:path];
+  BOOL found = NO;
+  while(!found) {
+    NSNumber *number = [dictionary objectForKey:kUserDefaultsSwitchState];
+    NSLog(@"number for %@ = %@", kUserDefaultsSwitchState, number);
+    if (number) {
+      found = [number boolValue] == state;
+    }
+  }
+  */
 }
 
 #pragma mark - View Lifecycle
